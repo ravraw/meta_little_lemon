@@ -3,26 +3,34 @@ import {
     Text,
     TextInput,
     View,
-    Image,
     StyleSheet,
     Pressable,
     Alert,
 } from 'react-native'
 import KeyboardAvoidingElement from '../components/KeyboardAvoidingElement'
-import { validateEmail } from '../utils'
+import { validateEmail, validateName } from '../utils'
 import Header from '../components/Header'
 
 const Onboarding = ({ navigation }) => {
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [isValid, setIsValid] = useState(false)
+    const [validName, setValidName] = useState(false)
+    const [validEmail, setValidEmail] = useState(false)
+
+    const isValidName = () => {
+        setValidName(validateName(name))
+    }
 
     const isValidEmail = () => {
-        setIsValid(validateEmail(email))
+        setValidEmail(validateEmail(email))
     }
+
     const showAlert = () =>
         Alert.alert('', 'Thanks for subscribing, stay tuned!', [
             { text: 'OK', onPress: () => navigation.navigate('Welcome') },
         ])
+
+    console.log({ name, email, validName, validEmail })
 
     return (
         <KeyboardAvoidingElement>
@@ -33,12 +41,12 @@ const Onboarding = ({ navigation }) => {
                     <View style={styles.textInputWrapper}>
                         <Text style={styles.textInputLabel}>First Name</Text>
                         <TextInput
-                            value={email}
-                            placeholder="Hello@example.com"
-                            onChangeText={setEmail}
-                            onChange={isValidEmail}
-                            keyboardType="email-address"
-                            maxLength={50}
+                            value={name}
+                            placeholder="John Doe"
+                            onChangeText={setName}
+                            onChange={isValidName}
+                            keyboardType="default"
+                            maxLength={28}
                             style={styles.textInput}
                             clearButtonMode="always"
                         />
@@ -61,9 +69,11 @@ const Onboarding = ({ navigation }) => {
                 <Pressable
                     style={[
                         styles.button,
-                        !isValid && { backgroundColor: 'gray' },
+                        (!validName || !validEmail) && {
+                            backgroundColor: 'gray',
+                        },
                     ]}
-                    disabled={!isValid}
+                    disabled={!validName || !validEmail}
                     onPress={showAlert}
                 >
                     <Text style={styles.buttonText}>Next</Text>
