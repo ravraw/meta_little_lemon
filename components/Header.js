@@ -1,16 +1,23 @@
-import React from "react";
-import { Image } from "react-native"
+import React from 'react'
+import { Image, StyleSheet, View } from 'react-native'
 
 const Header = () => {
     return (
-        <View>
-        <Image
-            style={styles.logo}
-            source={require("../assets/Logo.png")}
-          />
-      </View>
+        <View style={styles.container}>
+            <Image style={styles.logo} source={require('../assets/Logo.png')} />
+        </View>
     )
-
 }
 
-export default Header;
+const styles = StyleSheet.create({
+    container: {
+        width: '100%',
+        alignItems: 'center',
+        margin: 15,
+    },
+    logo: {
+        resizeMode: 'contain',
+    },
+})
+
+export default Header
