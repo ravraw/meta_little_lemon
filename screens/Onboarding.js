@@ -10,6 +10,7 @@ import {
 import KeyboardAvoidingElement from '../components/KeyboardAvoidingElement'
 import { validateEmail, validateName } from '../utils'
 import Header from '../components/Header'
+import { registerSensor } from 'react-native-reanimated/lib/typescript/reanimated2/core'
 
 const Onboarding = ({ navigation }) => {
     const [name, setName] = useState('')
@@ -22,7 +23,9 @@ const Onboarding = ({ navigation }) => {
     }
 
     const isValidEmail = () => {
-        setValidEmail(validateEmail(email))
+        result = validateEmail(email)
+        console.log({ result })
+        setValidEmail(result)
     }
 
     const showAlert = () =>
@@ -42,7 +45,7 @@ const Onboarding = ({ navigation }) => {
                         <Text style={styles.textInputLabel}>First Name</Text>
                         <TextInput
                             value={name}
-                            placeholder="John Doe"
+                            placeholder="John"
                             onChangeText={setName}
                             onChange={isValidName}
                             keyboardType="default"
