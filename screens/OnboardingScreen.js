@@ -12,7 +12,7 @@ import { validateEmail, validateName } from '../utils'
 import Header from '../components/Header'
 import { registerSensor } from 'react-native-reanimated/lib/typescript/reanimated2/core'
 
-const Onboarding = ({ navigation }) => {
+const OnboardingScreen = ({ navigation }) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [validName, setValidName] = useState(false)
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default Onboarding
+export default OnboardingScreen

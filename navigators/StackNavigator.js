@@ -2,11 +2,11 @@ import * as React from 'react'
 import { SafeAreaView, StyleSheet, useColorScheme } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import Onboarding from '../screens/Onboarding'
+import Onboarding from '../screens/OnboardingScreen'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
-const BottomNavigator = () => {
+const StackNavigator = () => {
     const colorScheme = useColorScheme()
     return (
         <SafeAreaView
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default BottomNavigator
+export default StackNavigator

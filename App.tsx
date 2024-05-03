@@ -1,11 +1,10 @@
 import { NavigationContainer } from "@react-navigation/native";
-import BottomNavigator from "./navigators/BottomNavigator";
-import { Text } from "react-native-paper";
+import StackNavigator from "./navigators/StackNavigator";
 
 export default function App() {
   return (
     <NavigationContainer>
-      <BottomNavigator />
+      <StackNavigator />
     </NavigationContainer>
   );
 }
