@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { SafeAreaView, StyleSheet, useColorScheme } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import Onboarding from '../screens/OnboardingScreen'
+import OnboardingScreen from '../screens/OnboardingScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 import SplashScreen from '../screens/SplashScreen'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import WelcomeScreen from '../screens/WelcomeScreen'
+import MenuScreen from '../screens/MenuScreen'
+import { SignedInContext } from '../App'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
 const StackNavigator = () => {
-    const [isLoading, setIsLoading] = useState(false)
-    const [isSignedIn, setSignedIn] = useState(false)
-    const [userToken, setUserToken] = useState(false)
-
+    const { isSignedIn, isLoading } = useContext(SignedInContext)
     const colorScheme = useColorScheme()
 
     if (isLoading) {
         return <SplashScreen />
     }
+
+    console.log({ isSignedInStack: isSignedIn })
 
     return (
         <SafeAreaView
@@ -32,9 +33,13 @@ const StackNavigator = () => {
         >
             <Navigator>
                 {isSignedIn ? (
-                    <Screen name="Profile" component={ProfileScreen} />
+                    <>
+                        <Screen name="Welcome" component={WelcomeScreen} />
+                        <Screen name="Menu" component={MenuScreen} />
+                        <Screen name="Profile" component={ProfileScreen} />
+                    </>
                 ) : (
-                    <Screen name="Onboarding" component={Onboarding} />
+                    <Screen name="Onboarding" component={OnboardingScreen} />
                 )}
             </Navigator>
         </SafeAreaView>
