@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import {
     Text,
     TextInput,
@@ -11,8 +11,10 @@ import KeyboardAvoidingElement from '../components/KeyboardAvoidingElement'
 import { validateEmail, validateName } from '../utils'
 import Header from '../components/Header'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { SignedInContext } from '../App'
 
 const OnboardingScreen = ({ navigation }) => {
+    const { setSignedIn } = useContext(SignedInContext)
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [validName, setValidName] = useState(false)
@@ -26,13 +28,21 @@ const OnboardingScreen = ({ navigation }) => {
         setValidEmail(validateEmail(email))
     }
 
+    const setLoggedIn = async () => {
+        try {
+            await AsyncStorage.setItem('isSignedIn', 'true')
+            await setSignedIn(true)
+            navigation.navigate('Welcome')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const showAlert = () =>
         Alert.alert('', 'Thanks for subscribing, stay tuned!', [
             {
                 text: 'OK',
-                onPress: () => {
-                    AsyncStorage.setItem(['isSignedIn', true])
-                },
+                onPress: setLoggedIn,
             },
         ])
 
