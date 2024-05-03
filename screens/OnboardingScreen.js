@@ -23,17 +23,18 @@ const OnboardingScreen = ({ navigation }) => {
     }
 
     const isValidEmail = () => {
-        result = validateEmail(email)
-        console.log({ result })
-        setValidEmail(result)
+        setValidEmail(validateEmail(email))
     }
 
     const showAlert = () =>
         Alert.alert('', 'Thanks for subscribing, stay tuned!', [
-            { text: 'OK', onPress: () => navigation.navigate('Welcome') },
+            {
+                text: 'OK',
+                onPress: () => {
+                    AsyncStorage.setItem(['isSignedIn', true])
+                },
+            },
         ])
-
-    console.log({ name, email, validName, validEmail })
 
     return (
         <KeyboardAvoidingElement>

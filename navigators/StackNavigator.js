@@ -5,12 +5,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Onboarding from '../screens/OnboardingScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 import SplashScreen from '../screens/SplashScreen'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
 const StackNavigator = () => {
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [isSignedIn, setSignedIn] = useState(false)
+    const [userToken, setUserToken] = useState(false)
 
     const colorScheme = useColorScheme()
 
@@ -29,9 +31,11 @@ const StackNavigator = () => {
             ]}
         >
             <Navigator>
-                isSignedIn ? (
-                <Screen name="Profile" component={ProfileScreen} />
-                ): ( <Screen name="Onboarding" component={Onboarding} /> )
+                {isSignedIn ? (
+                    <Screen name="Profile" component={ProfileScreen} />
+                ) : (
+                    <Screen name="Onboarding" component={Onboarding} />
+                )}
             </Navigator>
         </SafeAreaView>
     )
