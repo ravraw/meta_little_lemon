@@ -10,7 +10,7 @@ import {
 import KeyboardAvoidingElement from '../components/KeyboardAvoidingElement'
 import { validateEmail, validateName } from '../utils'
 import Header from '../components/Header'
-import { registerSensor } from 'react-native-reanimated/lib/typescript/reanimated2/core'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const OnboardingScreen = ({ navigation }) => {
     const [name, setName] = useState('')

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
-import Constants from 'expo-constants'
 import { Switch } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import useUpdate from '../hooks/useUpdate'
@@ -82,7 +81,7 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: Constants.statusBarHeight,
+        paddingTop: 15,
         backgroundColor: '#ecf0f1',
         padding: 16,
     },

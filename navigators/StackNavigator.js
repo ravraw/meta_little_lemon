@@ -1,13 +1,23 @@
-import * as React from 'react'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView, StyleSheet, useColorScheme } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import Onboarding from '../screens/OnboardingScreen'
+import ProfileScreen from '../screens/ProfileScreen'
+import SplashScreen from '../screens/SplashScreen'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
 const StackNavigator = () => {
+    const [isLoading, setIsLoading] = useState(true)
+    const [isSignedIn, setSignedIn] = useState(false)
+
     const colorScheme = useColorScheme()
+
+    if (isLoading) {
+        return <SplashScreen />
+    }
+
     return (
         <SafeAreaView
             style={[
@@ -19,7 +29,9 @@ const StackNavigator = () => {
             ]}
         >
             <Navigator>
-                <Screen name="Onboarding" component={Onboarding} />
+                isSignedIn ? (
+                <Screen name="Profile" component={ProfileScreen} />
+                ): ( <Screen name="Onboarding" component={Onboarding} /> )
             </Navigator>
         </SafeAreaView>
     )
