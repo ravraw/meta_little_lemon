@@ -6,6 +6,7 @@ import {
     TextInput,
     ScrollView,
     Pressable,
+    Image,
 } from 'react-native'
 import { Switch } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -15,9 +16,10 @@ import { validateName } from '../utils'
 
 const ProfileScreen = ({ navigation }) => {
     const defaultPreferences = {
-        pushNotifications: true,
-        emailMarketing: true,
-        latestNews: true,
+        orderStatuses: true,
+        passwordChanges: true,
+        specialOffers: true,
+        newsletter: true,
     }
     const [preferences, setPreferences] = useState(defaultPreferences)
 
@@ -88,6 +90,21 @@ const ProfileScreen = ({ navigation }) => {
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.header}>Personal Information</Text>
+            <View style={styles.avatarContainer}>
+                <Image
+                    source={require('../assets/images/avatar.png')}
+                    style={styles.avatarImage}
+                />
+                <Pressable style={[styles.button, styles.saveButton]}>
+                    <Text style={[styles.buttonText, styles.buttonTextWhite]}>
+                        Change
+                    </Text>
+                </Pressable>
+                <Pressable style={[styles.button, styles.discardButton]}>
+                    <Text style={styles.buttonText}>Remove</Text>
+                </Pressable>
+            </View>
+
             <View style={styles.inputContainer}>
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>First Name</Text>
@@ -143,27 +160,37 @@ const ProfileScreen = ({ navigation }) => {
                 </View>
             </View>
             <View style={styles.rowContainer}>
-                <Text style={styles.text}>Email notifications</Text>
-                <Text style={styles.header}>Account Preferences</Text>
+                <Text style={styles.header}>Email notification</Text>
                 <View style={styles.row}>
-                    <Text style={styles.text}>Push notifications</Text>
+                    <Text style={styles.text}>Order statuses</Text>
                     <Switch
-                        value={preferences.pushNotifications}
-                        onValueChange={updateState('pushNotifications')}
+                        color="#495E57"
+                        value={preferences.orderStatuses}
+                        onValueChange={updateState('orderStatuses')}
                     />
                 </View>
                 <View style={styles.row}>
-                    <Text style={styles.text}>Marketing emails</Text>
+                    <Text style={styles.text}>Password changes</Text>
                     <Switch
-                        value={preferences.emailMarketing}
-                        onValueChange={updateState('emailMarketing')}
+                        color="#495E57"
+                        value={preferences.passwordChanges}
+                        onValueChange={updateState('passwordChanges')}
                     />
                 </View>
                 <View style={styles.row}>
-                    <Text style={styles.text}>Latest news</Text>
+                    <Text style={styles.text}>Special offers</Text>
                     <Switch
-                        value={preferences.latestNews}
-                        onValueChange={updateState('latestNews')}
+                        color="#495E57"
+                        value={preferences.specialOffers}
+                        onValueChange={updateState('specialOffers')}
+                    />
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.text}>Newsletter</Text>
+                    <Switch
+                        color="#495E57"
+                        value={preferences.newsletter}
+                        onValueChange={updateState('newsletter')}
                     />
                 </View>
             </View>
@@ -191,30 +218,48 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         backgroundColor: '#ecf0f1',
     },
+    avatarContainer: {
+        width: '80%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    avatarImage: {
+        width: 75,
+        height: 75,
+        borderRadius: 100,
+        marginHorizontal: 10,
+    },
     rowContainer: {
         width: '80%',
         alignItems: 'flex-start',
         alignSelf: 'center',
-        paddingVertical: 10,
+        paddingVertical: 30,
     },
     row: {
-        width: '80%',
+        width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 16,
+    },
+    switch: {
+        color: '#495E57',
     },
     text: {
         fontSize: 18,
     },
     header: {
-        margin: 24,
-        fontSize: 18,
+        marginVertical: 10,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
+        // borderWidth: 1,
+        // borderColor: 'red',
     },
     inputContainer: {
         width: '100%',
         alignItems: 'center',
+        paddingVertical: 20,
     },
     textInputWrapper: {
         width: '80%',
@@ -239,7 +284,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: '10%',
-        marginVertical: 25,
+        marginVertical: 15,
         alignSelf: 'flex-end',
         borderRadius: 10,
         backgroundColor: '#F4CE14',
@@ -256,10 +301,10 @@ const styles = StyleSheet.create({
         color: '#EDEFEE',
     },
     button: {
-        height: 40,
-        width: '35%',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 10,
+        margin: 10,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#333333',
