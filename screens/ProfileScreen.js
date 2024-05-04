@@ -7,7 +7,7 @@ import {
     ScrollView,
     Pressable,
 } from 'react-native'
-import { Checkbox } from 'react-native-paper'
+import { Switch } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import useUpdate from '../hooks/useUpdate'
 import { SignedInContext } from '../App'
@@ -144,27 +144,27 @@ const ProfileScreen = ({ navigation }) => {
             </View>
             <View style={styles.rowContainer}>
                 <Text style={styles.text}>Email notifications</Text>
+                <Text style={styles.header}>Account Preferences</Text>
                 <View style={styles.row}>
-                    <Checkbox
-                        status={preferences.pushNotifications}
-                        onPress={updateState('pushNotifications')}
-                        color="red"
-                    />
                     <Text style={styles.text}>Push notifications</Text>
+                    <Switch
+                        value={preferences.pushNotifications}
+                        onValueChange={updateState('pushNotifications')}
+                    />
                 </View>
                 <View style={styles.row}>
-                    <Checkbox
-                        status={preferences.emailMarketing}
-                        onPress={updateState('emailMarketing')}
-                    />
                     <Text style={styles.text}>Marketing emails</Text>
+                    <Switch
+                        value={preferences.emailMarketing}
+                        onValueChange={updateState('emailMarketing')}
+                    />
                 </View>
                 <View style={styles.row}>
-                    <Checkbox
-                        status={preferences.latestNews}
-                        onPress={updateState('latestNews')}
-                    />
                     <Text style={styles.text}>Latest news</Text>
+                    <Switch
+                        value={preferences.latestNews}
+                        onValueChange={updateState('latestNews')}
+                    />
                 </View>
             </View>
             <Pressable style={styles.logoutButton}>
@@ -198,12 +198,10 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     row: {
+        width: '80%',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingVertical: 5,
-        // borderWidth: 1,
-        // borderColor: 'red',
+        justifyContent: 'space-between',
+        paddingVertical: 16,
     },
     text: {
         fontSize: 18,
@@ -221,7 +219,7 @@ const styles = StyleSheet.create({
     textInputWrapper: {
         width: '80%',
         alignItems: 'center',
-        marginVertical: 15,
+        marginVertical: 10,
     },
     textInputLabel: {
         alignSelf: 'flex-start',
