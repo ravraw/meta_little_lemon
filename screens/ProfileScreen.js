@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Text, StyleSheet, View, TextInput, ScrollView } from 'react-native'
+import {
+    Text,
+    StyleSheet,
+    View,
+    TextInput,
+    ScrollView,
+    Pressable,
+} from 'react-native'
 import { Checkbox } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import useUpdate from '../hooks/useUpdate'
@@ -135,37 +142,44 @@ const ProfileScreen = ({ navigation }) => {
                     />
                 </View>
             </View>
+            <View style={styles.rowContainer}>
+                <Text style={styles.text}>Email notifications</Text>
+                <View style={styles.row}>
+                    <Checkbox
+                        status={preferences.pushNotifications}
+                        onPress={updateState('pushNotifications')}
+                        color="red"
+                    />
+                    <Text style={styles.text}>Push notifications</Text>
+                </View>
+                <View style={styles.row}>
+                    <Checkbox
+                        status={preferences.emailMarketing}
+                        onPress={updateState('emailMarketing')}
+                    />
+                    <Text style={styles.text}>Marketing emails</Text>
+                </View>
+                <View style={styles.row}>
+                    <Checkbox
+                        status={preferences.latestNews}
+                        onPress={updateState('latestNews')}
+                    />
+                    <Text style={styles.text}>Latest news</Text>
+                </View>
+            </View>
+            <Pressable style={styles.logoutButton}>
+                <Text style={styles.buttonText}>Log out</Text>
+            </Pressable>
 
-            <View style={styles.row}>
-                <Text style={styles.text}>Push notifications</Text>
-                <Checkbox
-                    status={preferences.pushNotifications}
-                    onPress={updateState('pushNotifications')}
-                    color="red"
-                />
-            </View>
-            <View style={styles.row}>
-                <Text style={styles.text}>Marketing emails</Text>
-                <Checkbox
-                    status={preferences.emailMarketing}
-                    onPress={updateState('emailMarketing')}
-                />
-            </View>
-            <View style={styles.row}>
-                <Text style={styles.text}>Latest news</Text>
-                <Checkbox
-                    status={preferences.latestNews}
-                    onPress={updateState('latestNews')}
-                />
-            </View>
-            <View style={styles.row}>
-                <Checkbox
-                    status={checked ? 'checked' : 'unchecked'}
-                    onPress={() => {
-                        setChecked(!checked)
-                    }}
-                    color="red"
-                />
+            <View style={styles.changeButtonsContainer}>
+                <Pressable style={[styles.button, styles.discardButton]}>
+                    <Text style={styles.buttonText}>Discard changes</Text>
+                </Pressable>
+                <Pressable style={[styles.button, styles.saveButton]}>
+                    <Text style={[styles.buttonText, styles.buttonTextWhite]}>
+                        Save changes
+                    </Text>
+                </Pressable>
             </View>
         </ScrollView>
     )
@@ -176,12 +190,20 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 15,
         backgroundColor: '#ecf0f1',
-        padding: 16,
+    },
+    rowContainer: {
+        width: '80%',
+        alignItems: 'flex-start',
+        alignSelf: 'center',
+        paddingVertical: 10,
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 16,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        paddingVertical: 5,
+        // borderWidth: 1,
+        // borderColor: 'red',
     },
     text: {
         fontSize: 18,
@@ -212,6 +234,43 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 2,
         borderColor: 'black',
+    },
+    logoutButton: {
+        height: 40,
+        width: '80%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: '10%',
+        marginVertical: 25,
+        alignSelf: 'flex-end',
+        borderRadius: 10,
+        backgroundColor: '#F4CE14',
+    },
+    changeButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+    },
+    buttonText: {
+        color: '#333333',
+        fontWeight: 'bold',
+    },
+    buttonTextWhite: {
+        color: '#EDEFEE',
+    },
+    button: {
+        height: 40,
+        width: '35%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#333333',
+    },
+    discardButton: {
+        backgroundColor: '#EDEFEE',
+    },
+    saveButton: {
+        backgroundColor: '#495E57',
     },
 })
 
