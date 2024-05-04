@@ -31,12 +31,20 @@ const StackNavigator = () => {
                 },
             ]}
         >
-            <Navigator>
+            <Navigator
+            // screenOptions={{
+            //     headerShown: false,
+            // }}
+            >
                 {isSignedIn ? (
                     <>
+                        <Screen
+                            name="Profile"
+                            component={ProfileScreen}
+                            options={{ headerShown: false }}
+                        />
                         <Screen name="Welcome" component={WelcomeScreen} />
                         <Screen name="Menu" component={MenuScreen} />
-                        <Screen name="Profile" component={ProfileScreen} />
                     </>
                 ) : (
                     <Screen name="Onboarding" component={OnboardingScreen} />

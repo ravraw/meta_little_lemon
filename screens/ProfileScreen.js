@@ -1,16 +1,44 @@
-import React, { useState, useEffect } from 'react'
-import { Text, StyleSheet, View } from 'react-native'
-import { Switch } from 'react-native-paper'
+import React, { useState, useEffect, useContext } from 'react'
+import { Text, StyleSheet, View, TextInput, ScrollView } from 'react-native'
+import { Checkbox } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import useUpdate from '../hooks/useUpdate'
+import { SignedInContext } from '../App'
+import { validateName } from '../utils'
 
 const ProfileScreen = ({ navigation }) => {
     const defaultPreferences = {
-        pushNotifications: false,
-        emailMarketing: false,
-        latestNews: false,
+        pushNotifications: true,
+        emailMarketing: true,
+        latestNews: true,
     }
     const [preferences, setPreferences] = useState(defaultPreferences)
+
+    const { setSignedIn } = useContext(SignedInContext)
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [validFirstName, setValidFirstName] = useState(false)
+    const [validLastName, setValidLastName] = useState(false)
+    const [validEmail, setValidEmail] = useState(false)
+    const [checked, setChecked] = React.useState(false)
+
+    const isValidFirstName = () => {
+        setValidName(validateName(firstName))
+    }
+
+    const isValidLastName = () => {
+        setValidName(validateName(lastName))
+    }
+
+    const isValidEmail = () => {
+        setValidEmail(validEmail(email))
+    }
+
+    const isValidPhoneNumber = () => {
+        setValidEmail(validateEmail(email))
+    }
 
     useEffect(() => {
         // Populating preferences from storage using AsyncStorage.multiGet
@@ -51,30 +79,95 @@ const ProfileScreen = ({ navigation }) => {
         }))
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.header}>Account Preferences</Text>
+        <ScrollView style={styles.container}>
+            <Text style={styles.header}>Personal Information</Text>
+            <View style={styles.inputContainer}>
+                <View style={styles.textInputWrapper}>
+                    <Text style={styles.textInputLabel}>First Name</Text>
+                    <TextInput
+                        value={firstName}
+                        placeholder="John"
+                        onChangeText={setFirstName}
+                        onChange={isValidFirstName}
+                        keyboardType="default"
+                        maxLength={28}
+                        style={styles.textInput}
+                        clearButtonMode="always"
+                    />
+                </View>
+                <View style={styles.textInputWrapper}>
+                    <Text style={styles.textInputLabel}>Last Name</Text>
+                    <TextInput
+                        value={lastName}
+                        placeholder="Doe"
+                        onChangeText={setLastName}
+                        onChange={isValidLastName}
+                        keyboardType="default"
+                        maxLength={28}
+                        style={styles.textInput}
+                        clearButtonMode="always"
+                    />
+                </View>
+                <View style={styles.textInputWrapper}>
+                    <Text style={styles.textInputLabel}>Email</Text>
+                    <TextInput
+                        value={email}
+                        placeholder="Hello@example.com"
+                        onChangeText={setEmail}
+                        onChange={isValidEmail}
+                        keyboardType="email-address"
+                        maxLength={50}
+                        style={styles.textInput}
+                        clearButtonMode="always"
+                    />
+                </View>
+                <View style={styles.textInputWrapper}>
+                    <Text style={styles.textInputLabel}>Phone number</Text>
+                    <TextInput
+                        value={phoneNumber}
+                        placeholder="(403)123-123"
+                        onChangeText={setEmail}
+                        onChange={isValidEmail}
+                        keyboardType="number-pad"
+                        maxLength={50}
+                        style={styles.textInput}
+                        clearButtonMode="always"
+                    />
+                </View>
+            </View>
+
             <View style={styles.row}>
                 <Text style={styles.text}>Push notifications</Text>
-                <Switch
-                    value={preferences.pushNotifications}
-                    onValueChange={updateState('pushNotifications')}
+                <Checkbox
+                    status={preferences.pushNotifications}
+                    onPress={updateState('pushNotifications')}
+                    color="red"
                 />
             </View>
             <View style={styles.row}>
                 <Text style={styles.text}>Marketing emails</Text>
-                <Switch
-                    value={preferences.emailMarketing}
-                    onValueChange={updateState('emailMarketing')}
+                <Checkbox
+                    status={preferences.emailMarketing}
+                    onPress={updateState('emailMarketing')}
                 />
             </View>
             <View style={styles.row}>
                 <Text style={styles.text}>Latest news</Text>
-                <Switch
-                    value={preferences.latestNews}
-                    onValueChange={updateState('latestNews')}
+                <Checkbox
+                    status={preferences.latestNews}
+                    onPress={updateState('latestNews')}
                 />
             </View>
-        </View>
+            <View style={styles.row}>
+                <Checkbox
+                    status={checked ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                        setChecked(!checked)
+                    }}
+                    color="red"
+                />
+            </View>
+        </ScrollView>
     )
 }
 
@@ -98,6 +191,27 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
+    },
+    inputContainer: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    textInputWrapper: {
+        width: '80%',
+        alignItems: 'center',
+        marginVertical: 15,
+    },
+    textInputLabel: {
+        alignSelf: 'flex-start',
+        marginVertical: 5,
+    },
+    textInput: {
+        height: 50,
+        width: '100%',
+        padding: 10,
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: 'black',
     },
 })
 
