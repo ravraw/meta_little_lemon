@@ -6,18 +6,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SignedInContext = createContext({});
 
+const defaultUserStatus = {
+  isSignedIn: false,
+  isOnboardingCompleted: false,
+}
+
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSignedIn, setSignedIn] = useState(false)
-  const [userToken, setUserToken] = useState(false)
+  const [userStatus, setUserStatus]  = useState(defaultUserStatus);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
         try {
             setIsLoading(true)
-            const signedIn = await AsyncStorage.getItem('isSignedIn').then(value => value === "true")
-            setSignedIn(signedIn)
+            const values = await AsyncStorage.multiGet(['isSignedIn', 'isOnboardingCompleted'])
+            const userStatus = values.reduce((acc, curr) => {
+              // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
+              acc[curr[0]] = JSON.parse(curr[1]) || false
+              console.log(acc)
+              return acc
+          },
+          {})
         } catch (error) {
             console.log({ error })
         } finally{
@@ -26,7 +36,7 @@ export default function App() {
     })();
 },[])
   return (
-    <SignedInContext.Provider value={{isSignedIn, setSignedIn: () => setSignedIn, isLoading}}>
+    <SignedInContext.Provider value={{userStatus, setUserStatus, isLoading}}>
     <NavigationContainer>
       <StackNavigator />
     </NavigationContainer>
