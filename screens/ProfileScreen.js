@@ -34,29 +34,37 @@ const ProfileScreen = ({ navigation }) => {
     )
 
     const { setSignedIn } = useContext(SignedInContext)
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [phoneNumber, setPhoneNumber] = useState('')
     const [validFirstName, setValidFirstName] = useState(false)
     const [validLastName, setValidLastName] = useState(false)
     const [validEmail, setValidEmail] = useState(false)
     const [checked, setChecked] = React.useState(false)
 
-    const isValidFirstName = () => {
-        setValidFirstName(validateName(firstName))
+    const validateFirstName = () => {
+        setValidFirstName(validateName(personalInformation.firstName))
     }
 
-    const isValidLastName = () => {
-        setValidLastName(validateName(lastName))
+    const validateLastName = () => {
+        setValidLastName(validateName(personalInformation.lastName))
     }
 
-    const isValidEmail = () => {
-        setValidEmail(validEmail(userEmail))
+    const validateEmail = () => {
+        setValidEmail(validEmail(personalInformation.email))
     }
 
-    const isValidPhoneNumber = () => {
-        setPhoneNumber(validatePhoneNumber(phoneNumber))
+    const validatePhoneNumber = () => {
+        setPhoneNumber(validatePhoneNumber(personalInformation.phoneNumber))
+    }
+
+    const updatePreferences = (key, value) => {
+        setPreferences((prevState) => {
+            return { ...prevState, key: value }
+        })
+    }
+
+    const updatePersonalInformation = (key, value) => {
+        setPersonalInformation((prevState) => {
+            return { ...prevState, key: value }
+        })
     }
 
     const logout = async () => {
@@ -66,9 +74,6 @@ const ProfileScreen = ({ navigation }) => {
             console.log(error)
         }
     }
-
-    // console.log({ firstName, lastName, email, phoneNumber })
-    // console.log({ preferences })
 
     useEffect(() => {
         // Populating preferences from storage using AsyncStorage.multiGet
@@ -119,7 +124,7 @@ const ProfileScreen = ({ navigation }) => {
                 Alert.alert(`An error occurred: ${e.message}`)
             }
         })()
-    }, [preferences])
+    }, [preferences, personalInformation])
 
     const updateState = (key) => () =>
         setPreferences((prevState) => ({
@@ -151,8 +156,10 @@ const ProfileScreen = ({ navigation }) => {
                     <TextInput
                         value={personalInformation.firstName}
                         placeholder="John"
-                        onChangeText={setFirstName}
-                        onChange={isValidFirstName}
+                        onChangeText={(value) =>
+                            updatePersonalInformation('firstName', value)
+                        }
+                        onChange={validateFirstName}
                         keyboardType="default"
                         maxLength={28}
                         style={styles.textInput}
@@ -164,8 +171,10 @@ const ProfileScreen = ({ navigation }) => {
                     <TextInput
                         value={personalInformation.lastName}
                         placeholder="Doe"
-                        onChangeText={setLastName}
-                        onChange={isValidLastName}
+                        onChangeText={(value) =>
+                            updatePersonalInformation('lastName', value)
+                        }
+                        onChange={validateLastName}
                         keyboardType="default"
                         maxLength={28}
                         style={styles.textInput}
@@ -177,8 +186,10 @@ const ProfileScreen = ({ navigation }) => {
                     <TextInput
                         value={personalInformation.email.toLowerCase()}
                         placeholder="Hello@example.com"
-                        onChangeText={setEmail}
-                        onChange={isValidEmail}
+                        onChangeText={(value) =>
+                            updatePersonalInformation('email', value)
+                        }
+                        onChange={validateEmail}
                         keyboardType="email-address"
                         maxLength={50}
                         style={styles.textInput}
@@ -190,8 +201,10 @@ const ProfileScreen = ({ navigation }) => {
                     <TextInput
                         value={personalInformation.phoneNumber}
                         placeholder="(403)123-123"
-                        onChangeText={setPhoneNumber}
-                        onChange={isValidPhoneNumber}
+                        onChangeText={(value) =>
+                            updatePersonalInformation('phoneNumber', value)
+                        }
+                        onChange={validatePhoneNumber}
                         keyboardType="number-pad"
                         maxLength={50}
                         style={styles.textInput}
