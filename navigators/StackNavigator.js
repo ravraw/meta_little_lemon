@@ -22,6 +22,7 @@ const StackNavigator = () => {
     if (isLoading) {
         return <SplashScreen />
     }
+    console.log(isSignedIn, isOnboardingCompleted)
 
     return (
         <SafeAreaView

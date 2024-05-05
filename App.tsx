@@ -21,13 +21,14 @@ export default function App() {
         try {
             setIsLoading(true)
             const values = await AsyncStorage.multiGet(['isSignedIn', 'isOnboardingCompleted'])
-            const userStatus = values.reduce((acc, curr) => {
+            const initialUserStatus = values.reduce((acc, curr) => {
               // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
               acc[curr[0]] = JSON.parse(curr[1]) || false
               console.log(acc)
               return acc
           },
           {})
+          setUserStatus(prevStatus => {return {...prevStatus, ...initialUserStatus}})
         } catch (error) {
             console.log({ error })
         } finally{

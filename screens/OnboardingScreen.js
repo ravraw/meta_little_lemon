@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SignedInContext } from '../App'
 
 const OnboardingScreen = ({ navigation }) => {
-    const { setSignedIn } = useContext(SignedInContext)
+    const { setUserStatus } = useContext(SignedInContext)
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [validName, setValidName] = useState(false)
@@ -35,7 +35,9 @@ const OnboardingScreen = ({ navigation }) => {
                 ['firstName', name],
                 ['email', email],
             ])
-            await setSignedIn(true)
+            await setUserStatus((prevStatus) => {
+                return { ...prevStatus, isSignedIn: 'true' }
+            })
             navigation.navigate('Welcome')
         } catch (error) {
             console.log(error)
@@ -72,7 +74,7 @@ const OnboardingScreen = ({ navigation }) => {
                     <View style={styles.textInputWrapper}>
                         <Text style={styles.textInputLabel}>Email</Text>
                         <TextInput
-                            value={email}
+                            value={email.toLowerCase()}
                             placeholder="Hello@example.com"
                             onChangeText={setEmail}
                             onChange={isValidEmail}
