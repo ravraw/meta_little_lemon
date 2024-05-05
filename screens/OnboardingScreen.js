@@ -30,7 +30,11 @@ const OnboardingScreen = ({ navigation }) => {
 
     const setLoggedIn = async () => {
         try {
-            await AsyncStorage.setItem('isSignedIn', 'true')
+            await AsyncStorage.multiSet([
+                ['isSignedIn', 'true'],
+                ['firstName', name],
+                ['email', email],
+            ])
             await setSignedIn(true)
             navigation.navigate('Welcome')
         } catch (error) {

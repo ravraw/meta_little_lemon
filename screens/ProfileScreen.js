@@ -12,9 +12,16 @@ import { Switch } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import useUpdate from '../hooks/useUpdate'
 import { SignedInContext } from '../App'
-import { validateName } from '../utils'
+import { validateName, validatePhoneNumber } from '../utils'
 
 const ProfileScreen = ({ navigation }) => {
+    const defaultPersonalInformation = {
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+    }
+
     const defaultPreferences = {
         orderStatuses: true,
         passwordChanges: true,
@@ -22,6 +29,9 @@ const ProfileScreen = ({ navigation }) => {
         newsletter: true,
     }
     const [preferences, setPreferences] = useState(defaultPreferences)
+    const [personalInformation, setPersonalInformation] = useState(
+        defaultPersonalInformation
+    )
 
     const { setSignedIn } = useContext(SignedInContext)
     const [firstName, setFirstName] = useState('')
@@ -34,36 +44,66 @@ const ProfileScreen = ({ navigation }) => {
     const [checked, setChecked] = React.useState(false)
 
     const isValidFirstName = () => {
-        setValidName(validateName(firstName))
+        setValidFirstName(validateName(firstName))
     }
 
     const isValidLastName = () => {
-        setValidName(validateName(lastName))
+        setValidLastName(validateName(lastName))
     }
 
     const isValidEmail = () => {
-        setValidEmail(validEmail(email))
+        setValidEmail(validEmail(userEmail))
     }
 
     const isValidPhoneNumber = () => {
-        setValidEmail(validateEmail(email))
+        setPhoneNumber(validatePhoneNumber(phoneNumber))
     }
+
+    const logout = async () => {
+        try {
+            await AsyncStorage.setItem('isSignedIn', 'false')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // console.log({ firstName, lastName, email, phoneNumber })
+    // console.log({ preferences })
 
     useEffect(() => {
         // Populating preferences from storage using AsyncStorage.multiGet
         ;(async () => {
             try {
-                const values = await AsyncStorage.multiGet(
-                    Object.keys(preferences)
+                const savedPreferences = await AsyncStorage.multiGet([
+                    ...Object.keys(preferences),
+                ])
+                const savedPersonalInfo = await AsyncStorage.multiGet([
+                    ...Object.keys(personalInformation),
+                ])
+                const initialPreferences = savedPreferences.reduce(
+                    (acc, curr) => {
+                        // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
+                        acc[curr[0]] = JSON.parse(curr[1])
+                        console.log(acc[curr[0]])
+                        return acc
+                    },
+                    {}
                 )
-                const initialState = values.reduce((acc, curr) => {
-                    // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
-                    acc[curr[0]] = JSON.parse(curr[1])
-                    return acc
-                }, {})
-                setPreferences(initialState)
+
+                const initialPersonalInfo = savedPersonalInfo.reduce(
+                    (acc, curr) => {
+                        // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
+                        acc[curr[0]] = curr[1] ? curr[1] : ''
+                        console.log(acc[curr[0]])
+                        return acc
+                    },
+                    {}
+                )
+
+                setPreferences(initialPreferences)
+                setPersonalInformation(initialPersonalInfo)
             } catch (e) {
-                Alert.alert(`An error occurred: ${e.message}`)
+                console.log(e.message)
             }
         })()
     }, [])
@@ -109,7 +149,7 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>First Name</Text>
                     <TextInput
-                        value={firstName}
+                        value={personalInformation.firstName}
                         placeholder="John"
                         onChangeText={setFirstName}
                         onChange={isValidFirstName}
@@ -122,7 +162,7 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>Last Name</Text>
                     <TextInput
-                        value={lastName}
+                        value={personalInformation.lastName}
                         placeholder="Doe"
                         onChangeText={setLastName}
                         onChange={isValidLastName}
@@ -135,7 +175,7 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>Email</Text>
                     <TextInput
-                        value={email}
+                        value={personalInformation.email.toLowerCase()}
                         placeholder="Hello@example.com"
                         onChangeText={setEmail}
                         onChange={isValidEmail}
@@ -148,10 +188,10 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>Phone number</Text>
                     <TextInput
-                        value={phoneNumber}
+                        value={personalInformation.phoneNumber}
                         placeholder="(403)123-123"
-                        onChangeText={setEmail}
-                        onChange={isValidEmail}
+                        onChangeText={setPhoneNumber}
+                        onChange={isValidPhoneNumber}
                         keyboardType="number-pad"
                         maxLength={50}
                         style={styles.textInput}
@@ -194,7 +234,7 @@ const ProfileScreen = ({ navigation }) => {
                     />
                 </View>
             </View>
-            <Pressable style={styles.logoutButton}>
+            <Pressable style={styles.logoutButton} onPress={logout}>
                 <Text style={styles.buttonText}>Log out</Text>
             </Pressable>
 
