@@ -8,7 +8,7 @@ import {
     Alert,
 } from 'react-native'
 import KeyboardAvoidingElement from '../components/KeyboardAvoidingElement'
-import { validateEmail, validateName } from '../utils'
+import { testEmail, testFirstName } from '../utils'
 import Header from '../components/Header'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SignedInContext } from '../App'
@@ -21,11 +21,11 @@ const OnboardingScreen = ({ navigation }) => {
     const [validEmail, setValidEmail] = useState(false)
 
     const isValidName = () => {
-        setValidName(validateName(name))
+        setValidName(testFirstName(name))
     }
 
     const isValidEmail = () => {
-        setValidEmail(validateEmail(email))
+        setValidEmail(testEmail(email))
     }
 
     const setLoggedIn = async () => {

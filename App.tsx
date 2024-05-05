@@ -17,24 +17,23 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    async () => {
         try {
             setIsLoading(true)
             const values = await AsyncStorage.multiGet(['isSignedIn', 'isOnboardingCompleted'])
             const initialUserStatus = values.reduce((acc, curr) => {
               // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
               acc[curr[0]] = JSON.parse(curr[1]) || false
-              console.log(acc)
               return acc
           },
           {})
-          setUserStatus(prevStatus => {return {...prevStatus, ...initialUserStatus}})
+          setUserStatus(prevStatus => ({...prevStatus, ...initialUserStatus}))
         } catch (error) {
             console.log({ error })
         } finally{
           setIsLoading(false)
         }
-    })();
+    };
 },[])
   return (
     <SignedInContext.Provider value={{userStatus, setUserStatus, isLoading}}>

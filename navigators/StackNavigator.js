@@ -22,7 +22,6 @@ const StackNavigator = () => {
     if (isLoading) {
         return <SplashScreen />
     }
-    console.log(isSignedIn, isOnboardingCompleted)
 
     return (
         <SafeAreaView
@@ -36,23 +35,15 @@ const StackNavigator = () => {
         >
             <Navigator>
                 {isSignedIn ? (
-                    isOnboardingCompleted ? (
-                        <>
-                            <Screen name="Welcome" component={WelcomeScreen} />
-                            <Screen name="Menu" component={MenuScreen} />
-                            <Screen
-                                name="Profile"
-                                component={ProfileScreen}
-                                options={{ headerShown: false }}
-                            />
-                        </>
-                    ) : (
+                    <>
+                        <Screen name="Welcome" component={WelcomeScreen} />
+                        <Screen name="Menu" component={MenuScreen} />
                         <Screen
                             name="Profile"
                             component={ProfileScreen}
                             options={{ headerShown: false }}
                         />
-                    )
+                    </>
                 ) : (
                     <Screen name="Onboarding" component={OnboardingScreen} />
                 )}
