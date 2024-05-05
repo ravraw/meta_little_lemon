@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, View, Text } from 'react'
 import MenuItemsList from './MenuItemList'
 
-const Menu = () => {
+const MenuComponent = () => {
     const [menu, setMenu] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
@@ -27,4 +27,4 @@ const Menu = () => {
     return <MenuItemsList menu={menu} />
 }
 
-export default Menu
+export default MenuComponent

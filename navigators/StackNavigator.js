@@ -6,7 +6,6 @@ import OnboardingScreen from '../screens/OnboardingScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 import SplashScreen from '../screens/SplashScreen'
 import WelcomeScreen from '../screens/WelcomeScreen'
-import MenuScreen from '../components/Menu'
 import { SignedInContext } from '../App'
 import HomeScreen from '../screens/HomeScreen'
 

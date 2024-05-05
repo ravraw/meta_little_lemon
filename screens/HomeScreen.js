@@ -6,13 +6,13 @@ import {
     Pressable,
 } from 'react-native'
 import HomeBanner from '../components/HomeBanner'
-import MenuScreen from '../components/Menu'
+import MenuComponet from '../components/MenuComponent'
 
 const HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <HomeBanner />
-            <MenuScreen />
+            <MenuComponet />
         </View>
     )
 }

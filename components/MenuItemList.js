@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, FlatList, Text } from 'react-native'
 import MenuItem from './MenuItem'
+import Categories from './Categories'
 
 const renderItem = ({ item: { name, price, description, image } }) => (
     <MenuItem
@@ -13,8 +14,16 @@ const renderItem = ({ item: { name, price, description, image } }) => (
 const keyExtractor = (item, i) => item + i
 
 const MenuItemsList = ({ menu }) => {
+    const menuCategories = new Set(
+        menu.map((item) => {
+            const title = item['category']
+            return { id: title, title }
+        })
+    )
+    console.log(menuCategories)
     return (
         <View style={styles.container}>
+            <Categories categorie={menuCategories} />
             <FlatList
                 data={menu}
                 renderItem={renderItem}
