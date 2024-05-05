@@ -1,25 +1,24 @@
 import React from 'react'
-import { View, StyleSheet, SectionList, Text } from 'react-native'
+import { View, StyleSheet, FlatList, Text } from 'react-native'
 import MenuItem from './MenuItem'
 
-const renderItem = ({ item: { name, price } }) => (
-    <MenuItem name={name} price={price} />
-)
-const renderSectionHeader = ({ section: { title } }) => (
-    <View>
-        <Text style={styles.sectionHeading}>{title}</Text>
-    </View>
+const renderItem = ({ item: { name, price, description, image } }) => (
+    <MenuItem
+        name={name}
+        price={price}
+        description={description}
+        image={image}
+    />
 )
 const keyExtractor = (item, i) => item + i
 
 const MenuItemsList = ({ menu }) => {
     return (
         <View style={styles.container}>
-            <SectionList
-                sections={menu}
+            <FlatList
+                data={menu}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
-                renderSectionHeader={renderSectionHeader}
             />
         </View>
     )

@@ -8,6 +8,7 @@ import SplashScreen from '../screens/SplashScreen'
 import WelcomeScreen from '../screens/WelcomeScreen'
 import MenuScreen from '../screens/MenuScreen'
 import { SignedInContext } from '../App'
+import HomeScreen from '../screens/HomeScreen'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
@@ -33,7 +34,7 @@ const StackNavigator = () => {
                 },
             ]}
         >
-            <Navigator>
+            {/* <Navigator>
                 {isSignedIn ? (
                     <>
                         <Screen name="Welcome" component={WelcomeScreen} />
@@ -47,6 +48,21 @@ const StackNavigator = () => {
                 ) : (
                     <Screen name="Onboarding" component={OnboardingScreen} />
                 )}
+            </Navigator> */}
+
+            <Navigator>
+                <>
+                    {/* <Screen name="Home" component={HomeScreen} />
+                    <Screen name="Welcome" component={WelcomeScreen} /> */}
+                    <Screen name="Menu" component={MenuScreen} />
+                    {/* <Screen
+                        name="Profile"
+                        component={ProfileScreen}
+                        options={{ headerShown: false }}
+                    /> */}
+                </>
+
+                <Screen name="Onboarding" component={OnboardingScreen} />
             </Navigator>
         </SafeAreaView>
     )

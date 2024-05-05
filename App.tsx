@@ -19,7 +19,6 @@ export default function App() {
   useEffect(() => {
     async () => {
         try {
-            setIsLoading(true)
             const values = await AsyncStorage.multiGet(['isSignedIn', 'isOnboardingCompleted'])
             const initialUserStatus = values.reduce((acc, curr) => {
               // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']

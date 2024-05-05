@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react'
 import MenuItemsList from '../components/MenuItemList'
-import { menuItems } from '../helper/menuData'
 
 const MenuScreen = () => {
-    const [menu, setMenu] = useState(menuItems)
+    const [menu, setMenu] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
     const fetchMenu = async () => {
         try {
             const response = await fetch(
-                'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu-items-by-category.json'
+                'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'
             )
-            const json = await response.json()
-            setMenu(menuItems)
+            const { menu } = await response.json()
+            setMenu(menu)
         } catch (error) {
             console.error(error)
         } finally {

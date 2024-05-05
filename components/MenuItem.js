@@ -1,11 +1,19 @@
 import React from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, Image } from 'react-native'
 
-const MenuItem = ({ name, price }) => {
+const MenuItem = ({ name, description, price, image }) => {
+    console.log(`${name}`)
     return (
         <View style={styles.container}>
             <Text style={styles.text}>{name}</Text>
+            <Text style={styles.des}>{description}</Text>
             <Text style={styles.text}>{price}</Text>
+            <Image
+                style={styles.avatarImage}
+                source={{
+                    uri: 'https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${image}?raw=true',
+                }}
+            />
         </View>
     )
 }
