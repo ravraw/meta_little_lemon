@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import MenuItemsList from '../components/MenuItemList'
+import MenuItemsList from './MenuItemList'
 
-const MenuScreen = () => {
+const Menu = () => {
     const [menu, setMenu] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
@@ -27,4 +27,4 @@ const MenuScreen = () => {
     return <MenuItemsList menu={menu} />
 }
 
-export default MenuScreen
+export default Menu

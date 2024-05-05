@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, TextInput } from 'react-native'
 
 const HomeBanner = ({ navigation }) => {
     return (
@@ -19,6 +19,9 @@ const HomeBanner = ({ navigation }) => {
                     />
                 </View>
             </View>
+            <View style={styles.search}>
+                <TextInput placeholder="Search" styles={styles.textInput} />
+            </View>
         </View>
     )
 }
@@ -26,14 +29,14 @@ const HomeBanner = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        flex: 1,
         backgroundColor: '#495E57',
-        borderWidth: 1,
-        borderColor: 'red',
+        paddingVertical: 20,
+        marginTop: 20,
     },
     heading: {
-        fontSize: 40,
+        fontSize: 34,
         color: '#F4CE14',
+        marginHorizontal: 10,
     },
     subheading: {
         fontSize: 24,
@@ -44,9 +47,21 @@ const styles = StyleSheet.create({
         color: '#EDEFEE',
         marginVertical: 10,
     },
+    search: {
+        width: '95%',
+        height: 40,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        padding: 10,
+        backgroundColor: 'white',
+        borderBlockColor: '#333333',
+        borderRadius: 10,
+        fontWeight: 'bold',
+    },
     sectionContainer: {
         with: '100%',
         flexDirection: 'row',
+        marginHorizontal: 10,
     },
     sectionLeft: {
         width: '50%',

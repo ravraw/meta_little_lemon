@@ -6,11 +6,13 @@ import {
     Pressable,
 } from 'react-native'
 import HomeBanner from '../components/HomeBanner'
+import MenuScreen from '../components/Menu'
 
 const HomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <HomeBanner />
+            <MenuScreen />
         </View>
     )
 }

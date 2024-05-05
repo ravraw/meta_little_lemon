@@ -6,7 +6,7 @@ import OnboardingScreen from '../screens/OnboardingScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 import SplashScreen from '../screens/SplashScreen'
 import WelcomeScreen from '../screens/WelcomeScreen'
-import MenuScreen from '../screens/MenuScreen'
+import MenuScreen from '../components/Menu'
 import { SignedInContext } from '../App'
 import HomeScreen from '../screens/HomeScreen'
 
@@ -50,19 +50,23 @@ const StackNavigator = () => {
                 )}
             </Navigator> */}
 
-            <Navigator>
+            <Navigator
+                screenOptions={{
+                    headerShown: false,
+                }}
+            >
                 <>
-                    {/* <Screen name="Home" component={HomeScreen} />
-                    <Screen name="Welcome" component={WelcomeScreen} /> */}
+                    <Screen name="Home" component={HomeScreen} />
+                    {/* <Screen name="Welcome" component={WelcomeScreen} />
                     <Screen name="Menu" component={MenuScreen} />
-                    {/* <Screen
+                    <Screen
                         name="Profile"
                         component={ProfileScreen}
                         options={{ headerShown: false }}
                     /> */}
                 </>
 
-                <Screen name="Onboarding" component={OnboardingScreen} />
+                {/* <Screen name="Onboarding" component={OnboardingScreen} /> */}
             </Navigator>
         </SafeAreaView>
     )
