@@ -1,6 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { StyleSheet, View, FlatList, Text } from 'react-native'
 import Category from './Category'
 
 const Categories = ({ categories }) => {
@@ -8,7 +7,8 @@ const Categories = ({ categories }) => {
         <View style={styles.container}>
             <FlatList
                 data={categories}
-                renderItem={(item) => <Category item={item} />}
+                renderItem={({ item }) => <Category item={item} />}
+                keyExtractor={(item) => item.id}
             />
         </View>
     )

@@ -4,9 +4,9 @@ import {
     StyleSheet,
     View,
     TextInput,
-    ScrollView,
     Pressable,
     Image,
+    ScrollView,
 } from 'react-native'
 import { Switch } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -55,7 +55,6 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     const updateProfile = (obj) => {
-        console.log(obj)
         setProfile((prevState) => {
             return { ...prevState, ...obj }
         })

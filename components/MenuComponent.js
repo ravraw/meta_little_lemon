@@ -1,4 +1,4 @@
-import { useState, useEffect, View, Text } from 'react'
+import { useState, useEffect } from 'react'
 import MenuItemsList from './MenuItemList'
 
 const MenuComponent = () => {

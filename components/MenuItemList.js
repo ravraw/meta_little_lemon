@@ -14,16 +14,17 @@ const renderItem = ({ item: { name, price, description, image } }) => (
 const keyExtractor = (item, i) => item + i
 
 const MenuItemsList = ({ menu }) => {
-    const menuCategories = new Set(
-        menu.map((item) => {
-            const title = item['category']
-            return { id: title, title }
-        })
-    )
-    console.log(menuCategories)
+    const menuCategories = [...new Set(menu.map((item) => item['category']))]
+
+    const categoryItems = menuCategories.map((title) => {
+        return { id: title, title }
+    })
+
+    // console.log(categoryItems)
+
     return (
         <View style={styles.container}>
-            <Categories categorie={menuCategories} />
+            <Categories categories={categoryItems} />
             <FlatList
                 data={menu}
                 renderItem={renderItem}

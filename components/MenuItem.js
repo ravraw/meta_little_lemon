@@ -2,7 +2,6 @@ import React from 'react'
 import { Text, StyleSheet, View, Image } from 'react-native'
 
 const MenuItem = ({ name, description, price, image }) => {
-    console.log(`${name}`)
     return (
         <View style={styles.container}>
             <View style={styles.contentLeft}>
