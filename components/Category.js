@@ -2,10 +2,10 @@ import React from 'react'
 import { Text, StyleSheet, View, Pressable } from 'react-native'
 import { capitalize } from '../utils/helper'
 
-const Category = ({ item: { id, title } }) => {
+const Category = ({ item: { id, title }, filterMenu }) => {
     return (
         <View style={styles.container}>
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button} onPress={() => filterMenu(title)}>
                 <Text style={styles.buttonText}>{`${capitalize(title)}`}</Text>
             </Pressable>
         </View>

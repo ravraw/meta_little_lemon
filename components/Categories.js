@@ -2,15 +2,17 @@ import React from 'react'
 import { StyleSheet, View, FlatList, Text } from 'react-native'
 import Category from './Category'
 
-const Categories = ({ categories }) => {
+const Categories = ({ categories, filterMenu }) => {
     return (
         <>
             <Text style={styles.subheading}> ORDER FOR DELIVERY!</Text>
             <View style={styles.container}>
                 <FlatList
                     horizontal={true}
-                    data={categories}
-                    renderItem={({ item }) => <Category item={item} />}
+                    data={[{ id: 'all', title: 'all' }, ...categories]}
+                    renderItem={({ item }) => (
+                        <Category item={item} filterMenu={filterMenu} />
+                    )}
                     keyExtractor={(item) => item.id}
                 />
             </View>
@@ -23,8 +25,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignSelf: 'center',
-        paddingVertical: 15,
-        marginVertical: 5,
+        paddingVertical: 5,
         borderRadius: 10,
         borderBottomWidth: 0.5,
         borderColor: 'gray',

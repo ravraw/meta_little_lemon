@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, FlatList, Text } from 'react-native'
 import MenuItem from './MenuItem'
 import Categories from './Categories'
@@ -14,17 +14,29 @@ const renderItem = ({ item: { name, price, description, image } }) => (
 const keyExtractor = (item, i) => item + i
 
 const MenuItemsList = ({ menu }) => {
+    const [filteredMenu, setFilteredMenu] = useState(menu)
     const menuCategories = [...new Set(menu.map((item) => item['category']))]
 
     const categoryItems = menuCategories.map((title) => {
         return { id: title, title }
     })
 
+    const filterMenu = (filterString) => {
+        if (filterString === 'all') {
+            setFilteredMenu(menu)
+        } else {
+            setFilteredMenu(
+                menu.filter((item) => item['category'].includes(filterString))
+            )
+        }
+    }
+
+    useEffect(() => setFilteredMenu(menu), [])
     return (
         <View style={styles.container}>
-            <Categories categories={categoryItems} />
+            <Categories categories={categoryItems} filterMenu={filterMenu} />
             <FlatList
-                data={menu}
+                data={filteredMenu}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
             />
