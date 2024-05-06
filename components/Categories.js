@@ -4,13 +4,17 @@ import Category from './Category'
 
 const Categories = ({ categories }) => {
     return (
-        <View style={styles.container}>
-            <FlatList
-                data={categories}
-                renderItem={({ item }) => <Category item={item} />}
-                keyExtractor={(item) => item.id}
-            />
-        </View>
+        <>
+            <Text style={styles.subheading}> ORDER FOR DELIVERY!</Text>
+            <View style={styles.container}>
+                <FlatList
+                    horizontal={true}
+                    data={categories}
+                    renderItem={({ item }) => <Category item={item} />}
+                    keyExtractor={(item) => item.id}
+                />
+            </View>
+        </>
     )
 }
 
@@ -24,6 +28,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderBottomWidth: 0.5,
         borderColor: 'gray',
+    },
+    subheading: {
+        alignSelf: 'flex-start',
+        fontSize: 20,
+        fontWeight: 'bold',
     },
 })
 

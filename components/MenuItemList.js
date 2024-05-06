@@ -20,8 +20,6 @@ const MenuItemsList = ({ menu }) => {
         return { id: title, title }
     })
 
-    // console.log(categoryItems)
-
     return (
         <View style={styles.container}>
             <Categories categories={categoryItems} />
