@@ -3,6 +3,7 @@ import React, { useState, useEffect, createContext } from 'react'
 import { NavigationContainer } from "@react-navigation/native";
 import StackNavigator from "./navigators/StackNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { connectToDatabase } from './database/db';
 
 export const SignedInContext = createContext({});
 
@@ -12,7 +13,10 @@ const defaultUserStatus = {
 }
 
 
+
+
 export default function App() {
+  const db = connectToDatabase()
   const [userStatus, setUserStatus]  = useState(defaultUserStatus);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,7 +39,7 @@ export default function App() {
     };
 },[])
   return (
-    <SignedInContext.Provider value={{userStatus, setUserStatus, isLoading}}>
+    <SignedInContext.Provider value={{userStatus, setUserStatus, isLoading, db}}>
     <NavigationContainer>
       <StackNavigator />
     </NavigationContainer>

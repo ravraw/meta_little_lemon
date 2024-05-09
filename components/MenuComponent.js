@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import MenuItemsList from './MenuItemList'
+import { SignedInContext } from '../App'
 
 const MenuComponent = () => {
     const [menu, setMenu] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
+    const { db } = useContext(SignedInContext)
 
     const fetchMenu = async () => {
         try {

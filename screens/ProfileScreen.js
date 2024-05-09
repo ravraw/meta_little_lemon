@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Text,
     StyleSheet,
@@ -10,8 +10,6 @@ import {
 } from 'react-native'
 import { Switch } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import useUpdate from '../hooks/useUpdate'
-import { SignedInContext } from '../App'
 import {
     testFirstName,
     testLastName,
