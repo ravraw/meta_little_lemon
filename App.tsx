@@ -1,9 +1,9 @@
-import React, { useState, useEffect, createContext } from 'react'
+import React, { useState, useEffect, createContext, useCallback } from 'react'
 
 import { NavigationContainer } from "@react-navigation/native";
 import StackNavigator from "./navigators/StackNavigator";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { connectToDatabase } from './database/db';
+import { connectToDatabase, createTables } from './database/db';
 
 export const SignedInContext = createContext({});
 
@@ -38,6 +38,20 @@ export default function App() {
         }
     };
 },[])
+
+const loadData = useCallback(async () => {
+  try {
+    const db = await connectToDatabase()
+    await createTables(db)
+  } catch (error) {
+    console.error(error)
+  }
+}, [])
+
+useEffect(() => {
+  loadData()
+}, [loadData])
+
   return (
     <SignedInContext.Provider value={{userStatus, setUserStatus, isLoading, db}}>
     <NavigationContainer>
