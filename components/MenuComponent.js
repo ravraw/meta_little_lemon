@@ -1,20 +1,27 @@
 import { useState, useEffect, useContext } from 'react'
 import MenuItemsList from './MenuItemList'
 import { SignedInContext } from '../App'
+import { addMenuItem, addMenuItems, getMenuItems } from '../database/menu'
+import { connectToDatabase } from '../database/db'
 
 const MenuComponent = () => {
     const [menu, setMenu] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
-    const { db } = useContext(SignedInContext)
+    const db = connectToDatabase()
 
     const fetchMenu = async () => {
         try {
-            const response = await fetch(
-                'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'
-            )
-            const { menu } = await response.json()
-            setMenu(menu)
+            let menuItems = await getMenuItems()
+            if (!menuItems.length) {
+                const response = await fetch(
+                    'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'
+                )
+                const { menu } = await response.json()
+                menuItems = menu
+                await addMenuItems(menuItems)
+            }
+            setMenu(menuItems)
         } catch (error) {
             console.error(error)
         } finally {
