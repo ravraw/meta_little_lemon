@@ -13,7 +13,7 @@ const MenuComponent = () => {
     const fetchMenu = async () => {
         try {
             let menuItems = await getMenuItems()
-            if (!menuItems.length) {
+            if (menuItems.length < 10) {
                 const response = await fetch(
                     'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'
                 )

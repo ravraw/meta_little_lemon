@@ -1,23 +1,22 @@
 import { connectToDatabase, createTables } from './db'
 
 export const addMenuItems = async (items) => {
-    console.log(items[1])
     const db = await connectToDatabase()
 
-    const values = [items[1]]
+    const values = items
         .map(
             (item) => `(
-        ${item.name},
-        ${item.price},
-        ${item.image},
-        ${item.description},
-        ${item.category}
+        "${item.name}",
+        "${item.price}",
+        "${item.image}",
+        "${item.description}",
+        "${item.category}"
     )`
         )
         .join(',')
 
     const insertQuery = `
-        INSERT INTO menu (name, price, description, image, category)
+        INSERT OR REPLACE INTO menu (name, price, description, image, category)
         VALUES ${values}`
     try {
         return db.executeSql(insertQuery, values)
@@ -37,7 +36,6 @@ export const getMenuItems = async () => {
                 menuItems.push(result.rows.item(index))
             }
         })
-        console.log({ menuItems })
         return menuItems
     } catch (error) {
         console.error(error)
