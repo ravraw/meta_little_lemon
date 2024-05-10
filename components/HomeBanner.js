@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TextInput } from 'react-native'
 
-const HomeBanner = ({ navigation }) => {
+const HomeBanner = ({ navigation, searchString, setSearchString }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>Little Lemon</Text>
@@ -8,7 +8,7 @@ const HomeBanner = ({ navigation }) => {
                 <View style={styles.sectionLeft}>
                     <Text style={styles.subheading}>Chicago</Text>
                     <Text style={styles.normalText}>
-                        We are family owned mediterranean restaurant, focused on
+                        We are family owned mediterranean restaurant, focu
                         traditional recipes served with a modern twist.
                     </Text>
                 </View>
@@ -20,7 +20,12 @@ const HomeBanner = ({ navigation }) => {
                 </View>
             </View>
             <View style={styles.search}>
-                <TextInput placeholder="Search" styles={styles.textInput} />
+                <TextInput
+                    value={searchString}
+                    onChangeText={setSearchString}
+                    placeholder="Search"
+                    styles={styles.textInput}
+                />
             </View>
         </View>
     )

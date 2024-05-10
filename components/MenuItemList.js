@@ -14,14 +14,14 @@ const renderItem = ({ item: { name, price, description, image } }) => (
 const keyExtractor = (item, i) => item + i
 
 const MenuItemsList = ({ menu }) => {
-    const [filteredMenu, setFilteredMenu] = useState(menu)
+    const [filteredMenu, setFilteredMenu] = useState()
     const menuCategories = [...new Set(menu.map((item) => item['category']))]
 
     const categoryItems = menuCategories.map((title) => {
         return { id: title, title }
     })
 
-    const filterMenu = (filterString) => {
+    const filterMenu = (filterString = 'all') => {
         if (filterString === 'all') {
             setFilteredMenu(menu)
         } else {
@@ -31,7 +31,7 @@ const MenuItemsList = ({ menu }) => {
         }
     }
 
-    useEffect(() => setFilteredMenu(menu), [])
+    useEffect(() => setFilteredMenu(menu), [menu])
     return (
         <View style={styles.container}>
             <Categories categories={categoryItems} filterMenu={filterMenu} />

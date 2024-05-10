@@ -3,9 +3,11 @@ import MenuItemsList from './MenuItemList'
 import { SignedInContext } from '../App'
 import { addMenuItem, addMenuItems, getMenuItems } from '../database/menu'
 import { connectToDatabase } from '../database/db'
+import HomeBanner from './HomeBanner'
 
 const MenuComponent = () => {
     const [menu, setMenu] = useState([])
+    const [searchString, setSearchString] = useState('')
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const db = connectToDatabase()
@@ -33,7 +35,23 @@ const MenuComponent = () => {
         fetchMenu()
     }, [])
 
-    return <MenuItemsList menu={menu} />
+    const searchedMenu = menu.filter((item) =>
+        searchString ? item.description.includes(searchString) : true
+    )
+
+    console.log({ searchString, menulength: searchedMenu.length })
+
+    return (
+        <>
+            <HomeBanner
+                searchString={searchString}
+                setSearchString={(value) =>
+                    setSearchString(value.toLowerCase())
+                }
+            />
+            <MenuItemsList menu={searchedMenu} />
+        </>
+    )
 }
 
 export default MenuComponent
