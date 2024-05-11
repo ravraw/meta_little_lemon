@@ -11,7 +11,7 @@ const renderItem = ({ item: { name, price, description, image } }) => (
         image={image}
     />
 )
-const keyExtractor = (item, i) => item + i
+const keyExtractor = ({ name }) => name
 
 const MenuItemsList = ({ menu, categories, filterMenu }) => {
     return (

@@ -10,8 +10,12 @@ const Categories = ({ categories, filterMenu }) => {
                 <FlatList
                     horizontal={true}
                     data={categories}
-                    renderItem={({ item }) => (
-                        <Category item={item} filterMenu={filterMenu} />
+                    renderItem={(item, index) => (
+                        <Category
+                            item={item}
+                            filterMenu={filterMenu}
+                            index={index}
+                        />
                     )}
                     keyExtractor={(item) => item.id}
                 />

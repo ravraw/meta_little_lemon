@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import MenuItemsList from './MenuItemList'
 import {
     addMenuItem,
@@ -6,19 +6,22 @@ import {
     getByCategory,
     getBySearchString,
     getMenuItems,
+    filterByQueryAndCategories,
 } from '../database/menu'
 import { connectToDatabase } from '../database/db'
 import HomeBanner from './HomeBanner'
+import { useUpdateEffect, debounce } from '../utils/helper'
 
 const MenuComponent = () => {
+    const categories = ['starters', 'mains', 'desserts', 'drinks', 'specials']
     const [menu, setMenu] = useState([])
     const [searchString, setSearchString] = useState('')
+    const [selectedCategories, setSelectedCategories] = useState(
+        categories.map(() => false)
+    )
+
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
-    const db = connectToDatabase()
-    const categories = ['all', 'starters', 'mains', 'desserts'].map((title) => {
-        return { id: title, title }
-    })
 
     const fetchMenu = async () => {
         try {
@@ -43,37 +46,53 @@ const MenuComponent = () => {
         fetchMenu()
     }, [])
 
+    useUpdateEffect(() => {
+        ;(async () => {
+            const activeCategories = categories.filter((s, i) => {
+                // If all filters are deselected, all categories are active
+                if (selectedCategories.every((item) => item === false)) {
+                    return true
+                }
+                return selectedCategories[i]
+            })
+            try {
+                const menuItems = await filterByQueryAndCategories(
+                    searchString,
+                    activeCategories
+                )
+                console.log(menuItems)
+                setMenu(menuItems)
+            } catch (e) {
+                console.log(
+                    'Error when trying to fetch filtered menu',
+                    e.message
+                )
+            }
+        })()
+    }, [selectedCategories, searchString])
+
+    const lookup = useCallback((q) => {
+        setSearchString(q)
+    }, [])
+
+    const debouncedLookup = useMemo(() => debounce(lookup, 500))
+
     const searchMenu = async (string) => {
         setSearchString(string.toLowerCase())
-        let menuItems = []
-        if (string) {
-            menuItems = await getBySearchString(string)
-            setMenu(menuItems)
-        } else {
-            menuItems = await getMenuItems()
-            setMenu(menuItems)
-        }
+        debouncedLookup(string.toLowerCase())
     }
 
-    const filterMenu = async (categoryName) => {
-        let menuItems = []
-        if (categoryName === 'all' || '') {
-            menuItems = await getMenuItems()
-        } else {
-            menuItems = await getByCategory(categoryName)
-        }
-        setMenu(menuItems)
-    }
-
-    const updateSearchString = (string) => {
-        setSearchString(string.toLowerCase())
+    const filterMenu = async (index) => {
+        const arrayCopy = [...selectedCategories]
+        arrayCopy[index] = !selectedCategories[index]
+        setSelectedCategories(arrayCopy)
     }
 
     return (
         <>
             <HomeBanner
                 searchString={searchString}
-                setSearchString={updateSearchString}
+                setSearchString={searchMenu}
             />
             <MenuItemsList
                 menu={menu}
