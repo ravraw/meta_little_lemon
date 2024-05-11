@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, View, FlatList, Text } from 'react-native'
 import Category from './Category'
 
-const Categories = ({ categories, filterMenu }) => {
+const Categories = ({ categories, filterMenu, selectedCategories }) => {
     return (
         <>
             <Text style={styles.subheading}> ORDER FOR DELIVERY!</Text>
@@ -15,6 +15,7 @@ const Categories = ({ categories, filterMenu }) => {
                             item={item}
                             filterMenu={filterMenu}
                             index={index}
+                            selectedCategories={selectedCategories}
                         />
                     )}
                     keyExtractor={(item) => item.id}

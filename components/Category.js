@@ -2,11 +2,26 @@ import React from 'react'
 import { Text, StyleSheet, View, Pressable } from 'react-native'
 import { capitalize } from '../utils/helper'
 
-const Category = ({ item: { item, index }, filterMenu }) => {
+const Category = ({
+    item: { item, index },
+    filterMenu,
+    selectedCategories,
+}) => {
     return (
         <View style={styles.container}>
-            <Pressable style={styles.button} onPress={() => filterMenu(index)}>
-                <Text style={styles.buttonText}>{`${capitalize(item)}`}</Text>
+            <Pressable
+                style={[
+                    styles.button,
+                    selectedCategories[index] ? styles.buttonSelected : {},
+                ]}
+                onPress={() => filterMenu(index)}
+            >
+                <Text
+                    style={[
+                        styles.buttonText,
+                        selectedCategories[index] ? { color: '#FFFFFF' } : {},
+                    ]}
+                >{`${capitalize(item)}`}</Text>
             </Pressable>
         </View>
     )
@@ -19,6 +34,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#495E57',
     },
+    buttonSelected: { color: '#FFFFFF' },
     button: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -29,6 +45,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#EDEFEE',
         borderWidth: 1,
         borderColor: '#333333',
+    },
+    buttonSelected: {
+        backgroundColor: '#495E57',
     },
 })
 

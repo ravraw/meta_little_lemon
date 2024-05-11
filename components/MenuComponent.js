@@ -98,6 +98,7 @@ const MenuComponent = () => {
                 menu={menu}
                 categories={categories}
                 filterMenu={filterMenu}
+                selectedCategories={selectedCategories}
             />
         </>
     )

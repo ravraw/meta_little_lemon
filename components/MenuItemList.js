@@ -13,10 +13,19 @@ const renderItem = ({ item: { name, price, description, image } }) => (
 )
 const keyExtractor = ({ name }) => name
 
-const MenuItemsList = ({ menu, categories, filterMenu }) => {
+const MenuItemsList = ({
+    menu,
+    categories,
+    filterMenu,
+    selectedCategories,
+}) => {
     return (
         <View style={styles.container}>
-            <Categories categories={categories} filterMenu={filterMenu} />
+            <Categories
+                categories={categories}
+                filterMenu={filterMenu}
+                selectedCategories={selectedCategories}
+            />
             <FlatList
                 data={menu}
                 renderItem={renderItem}
