@@ -9,7 +9,7 @@ const Categories = ({ categories, filterMenu }) => {
             <View style={styles.container}>
                 <FlatList
                     horizontal={true}
-                    data={[{ id: 'all', title: 'all' }, ...categories]}
+                    data={categories}
                     renderItem={({ item }) => (
                         <Category item={item} filterMenu={filterMenu} />
                     )}

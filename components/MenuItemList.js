@@ -13,30 +13,12 @@ const renderItem = ({ item: { name, price, description, image } }) => (
 )
 const keyExtractor = (item, i) => item + i
 
-const MenuItemsList = ({ menu }) => {
-    const [filteredMenu, setFilteredMenu] = useState()
-    const menuCategories = [...new Set(menu.map((item) => item['category']))]
-
-    const categoryItems = menuCategories.map((title) => {
-        return { id: title, title }
-    })
-
-    const filterMenu = (filterString = 'all') => {
-        if (filterString === 'all') {
-            setFilteredMenu(menu)
-        } else {
-            setFilteredMenu(
-                menu.filter((item) => item['category'].includes(filterString))
-            )
-        }
-    }
-
-    useEffect(() => setFilteredMenu(menu), [menu])
+const MenuItemsList = ({ menu, categories, filterMenu }) => {
     return (
         <View style={styles.container}>
-            <Categories categories={categoryItems} filterMenu={filterMenu} />
+            <Categories categories={categories} filterMenu={filterMenu} />
             <FlatList
-                data={filteredMenu}
+                data={menu}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
             />

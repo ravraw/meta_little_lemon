@@ -38,8 +38,43 @@ export const getMenuItems = async () => {
         })
         return menuItems
     } catch (error) {
-        console.error(error)
-        // throw Error('Failed to get Menu items from database')
-        console.log('Failed to get Menu items from database')
+        console.log('Failed to get Menu items from database', error)
+    }
+}
+
+export const getBySearchString = async (searchString) => {
+    console.log(searchString)
+    const db = await connectToDatabase()
+    try {
+        const menuItems = []
+        const queryString = `SELECT * FROM menu WHERE description LIKE "%${searchString}%"`
+        const results = await db.executeSql(queryString)
+        results?.forEach((result) => {
+            for (let index = 0; index < result.rows.length; index++) {
+                menuItems.push(result.rows.item(index))
+            }
+        })
+        return menuItems
+    } catch (error) {
+        console.log('Failed to get Menu items from database', error)
+    }
+}
+
+export const getByCategory = async (categoryName) => {
+    console.log(categoryName)
+    const db = await connectToDatabase()
+    try {
+        const menuItems = []
+        const queryString = `SELECT * FROM menu WHERE category = "${categoryName}"`
+        console.log(queryString)
+        const results = await db.executeSql(queryString)
+        results?.forEach((result) => {
+            for (let index = 0; index < result.rows.length; index++) {
+                menuItems.push(result.rows.item(index))
+            }
+        })
+        return menuItems
+    } catch (error) {
+        console.log('Failed to get Menu items from database', error)
     }
 }

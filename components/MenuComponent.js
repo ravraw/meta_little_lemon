@@ -1,7 +1,12 @@
 import { useState, useEffect, useContext } from 'react'
 import MenuItemsList from './MenuItemList'
-import { SignedInContext } from '../App'
-import { addMenuItem, addMenuItems, getMenuItems } from '../database/menu'
+import {
+    addMenuItem,
+    addMenuItems,
+    getByCategory,
+    getBySearchString,
+    getMenuItems,
+} from '../database/menu'
 import { connectToDatabase } from '../database/db'
 import HomeBanner from './HomeBanner'
 
@@ -11,11 +16,14 @@ const MenuComponent = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const db = connectToDatabase()
+    const categories = ['all', 'starters', 'mains', 'desserts'].map((title) => {
+        return { id: title, title }
+    })
 
     const fetchMenu = async () => {
         try {
             let menuItems = await getMenuItems()
-            if (menuItems.length < 10) {
+            if (menuItems.length) {
                 const response = await fetch(
                     'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json'
                 )
@@ -35,21 +43,43 @@ const MenuComponent = () => {
         fetchMenu()
     }, [])
 
-    const searchedMenu = menu.filter((item) =>
-        searchString ? item.description.includes(searchString) : true
-    )
+    const searchMenu = async (string) => {
+        setSearchString(string.toLowerCase())
+        let menuItems = []
+        if (string) {
+            menuItems = await getBySearchString(string)
+            setMenu(menuItems)
+        } else {
+            menuItems = await getMenuItems()
+            setMenu(menuItems)
+        }
+    }
 
-    console.log({ searchString, menulength: searchedMenu.length })
+    const filterMenu = async (categoryName) => {
+        let menuItems = []
+        if (categoryName === 'all' || '') {
+            menuItems = await getMenuItems()
+        } else {
+            menuItems = await getByCategory(categoryName)
+        }
+        setMenu(menuItems)
+    }
+
+    const updateSearchString = (string) => {
+        setSearchString(string.toLowerCase())
+    }
 
     return (
         <>
             <HomeBanner
                 searchString={searchString}
-                setSearchString={(value) =>
-                    setSearchString(value.toLowerCase())
-                }
+                setSearchString={updateSearchString}
             />
-            <MenuItemsList menu={searchedMenu} />
+            <MenuItemsList
+                menu={menu}
+                categories={categories}
+                filterMenu={filterMenu}
+            />
         </>
     )
 }
