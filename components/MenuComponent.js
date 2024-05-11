@@ -1,14 +1,10 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import MenuItemsList from './MenuItemList'
 import {
-    addMenuItem,
     addMenuItems,
-    getByCategory,
-    getBySearchString,
     getMenuItems,
     filterByQueryAndCategories,
 } from '../database/menu'
-import { connectToDatabase } from '../database/db'
 import HomeBanner from './HomeBanner'
 import { useUpdateEffect, debounce } from '../utils/helper'
 
@@ -49,7 +45,6 @@ const MenuComponent = () => {
     useUpdateEffect(() => {
         ;(async () => {
             const activeCategories = categories.filter((s, i) => {
-                // If all filters are deselected, all categories are active
                 if (selectedCategories.every((item) => item === false)) {
                     return true
                 }
@@ -60,7 +55,6 @@ const MenuComponent = () => {
                     searchString,
                     activeCategories
                 )
-                console.log(menuItems)
                 setMenu(menuItems)
             } catch (e) {
                 console.log(

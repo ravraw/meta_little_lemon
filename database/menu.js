@@ -49,9 +49,6 @@ export const filterByQueryAndCategories = async (
     const query = searchString
         ? `SELECT * FROM menu WHERE name LIKE '%${searchString}%' AND category IN (?, ?, ?, ?, ?, ?)`
         : `SELECT * FROM menu WHERE  category IN (?, ?, ?, ?, ?, ?)`
-
-    console.log({ searchString, activeCategories, query })
-
     try {
         const menuItems = []
         const results = await db.executeSql(query, [...activeCategories])

@@ -67,7 +67,6 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        // Populating preferences from storage using AsyncStorage.multiGet
         ;async () => {
             try {
                 const savedProfile = await AsyncStorage.multiGet([
@@ -75,12 +74,9 @@ const ProfileScreen = ({ navigation }) => {
                 ])
 
                 const initialProfile = savedProfile.reduce((acc, curr) => {
-                    // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
                     acc[curr[0]] = JSON.parse(curr[1])
                     return acc
                 }, {})
-
-                // setProfile(initialProfile)
             } catch (e) {
                 console.log(e.message)
             } finally {
@@ -88,19 +84,6 @@ const ProfileScreen = ({ navigation }) => {
             }
         }
     }, [])
-
-    // useUpdate(() => {
-    //     ;(async () => {
-    //         const keyValues = Object.entries(profile).map((entry) => {
-    //             return [entry[0], String(entry[1])]
-    //         })
-    //         try {
-    //             await AsyncStorage.multiSet(keyValues)
-    //         } catch (e) {
-    //             Alert.alert(`An error occurred: ${e.message}`)
-    //         }
-    //     })()
-    // }, [profile])
 
     return (
         <ScrollView style={styles.container}>
