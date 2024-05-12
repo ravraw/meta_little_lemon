@@ -22,6 +22,9 @@ const StackNavigator = () => {
     if (isLoading) {
         return <SplashScreen />
     }
+    console.log({ isSignedIn })
+
+    useEffect(() => {}, [isSignedIn])
 
     return (
         <SafeAreaView
@@ -33,11 +36,11 @@ const StackNavigator = () => {
                 },
             ]}
         >
-            {/* <Navigator>
+            <Navigator>
                 {isSignedIn ? (
                     <>
                         <Screen name="Welcome" component={WelcomeScreen} />
-                        <Screen name="Menu" component={MenuScreen} />
+                        <Screen name="Menu" component={HomeScreen} />
                         <Screen
                             name="Profile"
                             component={ProfileScreen}
@@ -47,26 +50,26 @@ const StackNavigator = () => {
                 ) : (
                     <Screen name="Onboarding" component={OnboardingScreen} />
                 )}
-            </Navigator> */}
+            </Navigator>
 
-            <Navigator
+            {/* <Navigator
                 screenOptions={{
                     headerShown: false,
                 }}
-            >
-                <>
-                    <Screen name="Home" component={HomeScreen} />
-                    {/* <Screen name="Welcome" component={WelcomeScreen} />
-                    <Screen name="Menu" component={MenuScreen} />
-                    <Screen
+            > */}
+            <>
+                {/* <Screen name="Home" component={HomeScreen} /> */}
+                {/* <Screen name="Welcome" component={WelcomeScreen} /> */}
+                {/* <Screen name="Menu" component={MenuScreen} /> */}
+                {/* <Screen
                         name="Profile"
                         component={ProfileScreen}
                         options={{ headerShown: false }}
                     /> */}
-                </>
+            </>
 
-                {/* <Screen name="Onboarding" component={OnboardingScreen} /> */}
-            </Navigator>
+            {/* <Screen name="Onboarding" component={OnboardingScreen} /> */}
+            {/* </Navigator> */}
         </SafeAreaView>
     )
 }

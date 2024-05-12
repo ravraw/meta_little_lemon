@@ -12,11 +12,9 @@ const defaultUserStatus = {
   isOnboardingCompleted: false,
 }
 
-
-
+const db = connectToDatabase()
 
 export default function App() {
-  const db = connectToDatabase()
   const [userStatus, setUserStatus]  = useState(defaultUserStatus);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,6 +22,7 @@ export default function App() {
     async () => {
         try {
             const values = await AsyncStorage.multiGet(['isSignedIn', 'isOnboardingCompleted'])
+            console.log(values)
             const initialUserStatus = values.reduce((acc, curr) => {
               // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
               acc[curr[0]] = JSON.parse(curr[1]) || false
@@ -37,7 +36,7 @@ export default function App() {
           setIsLoading(false)
         }
     };
-},[])
+},[userStatus])
 
 const loadData = useCallback(async () => {
   try {

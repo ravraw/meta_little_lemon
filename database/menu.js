@@ -1,4 +1,4 @@
-import { connectToDatabase, createTables } from './db'
+import { connectToDatabase } from './db'
 
 export const addMenuItems = async (items) => {
     const db = await connectToDatabase()
