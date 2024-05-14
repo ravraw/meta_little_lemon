@@ -12,19 +12,16 @@ import HomeScreen from '../screens/HomeScreen'
 const { Navigator, Screen } = createNativeStackNavigator()
 
 const StackNavigator = () => {
-    const {
-        userStatus: { isSignedIn, isOnboardingCompleted },
-        setUserStatus,
-        isLoading,
-    } = useContext(SignedInContext)
+    const { isSignedIn, isLoading } = useContext(SignedInContext)
     const colorScheme = useColorScheme()
 
     if (isLoading) {
         return <SplashScreen />
     }
-    console.log({ isSignedIn })
 
-    useEffect(() => {}, [isSignedIn])
+    // useEffect(() => {}, [isSignedIn])
+
+    console.log('From Navigator --- ', isSignedIn)
 
     return (
         <SafeAreaView
@@ -37,39 +34,20 @@ const StackNavigator = () => {
             ]}
         >
             <Navigator>
-                {isSignedIn ? (
+                {true ? (
                     <>
-                        <Screen name="Welcome" component={WelcomeScreen} />
-                        <Screen name="Menu" component={HomeScreen} />
                         <Screen
                             name="Profile"
                             component={ProfileScreen}
                             options={{ headerShown: false }}
                         />
+                        <Screen name="Welcome" component={WelcomeScreen} />
+                        <Screen name="Menu" component={HomeScreen} />
                     </>
                 ) : (
                     <Screen name="Onboarding" component={OnboardingScreen} />
                 )}
             </Navigator>
-
-            {/* <Navigator
-                screenOptions={{
-                    headerShown: false,
-                }}
-            > */}
-            <>
-                {/* <Screen name="Home" component={HomeScreen} /> */}
-                {/* <Screen name="Welcome" component={WelcomeScreen} /> */}
-                {/* <Screen name="Menu" component={MenuScreen} /> */}
-                {/* <Screen
-                        name="Profile"
-                        component={ProfileScreen}
-                        options={{ headerShown: false }}
-                    /> */}
-            </>
-
-            {/* <Screen name="Onboarding" component={OnboardingScreen} /> */}
-            {/* </Navigator> */}
         </SafeAreaView>
     )
 }

@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SignedInContext } from '../App'
 
 const OnboardingScreen = ({ navigation }) => {
-    const { setUserStatus } = useContext(SignedInContext)
+    const { setIsSignedIn } = useContext(SignedInContext)
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [validName, setValidName] = useState(false)
@@ -29,25 +29,21 @@ const OnboardingScreen = ({ navigation }) => {
     }
 
     const setLoggedIn = async () => {
+        setIsSignedIn(true)
         try {
-            // await AsyncStorage.multiSet([
-            //     ['isSignedIn', 'true'],
-            //     ['firstName', name],
-            //     ['email', email],
-            // ])
-            setUserStatus({ isSignedIn: true, isOnboardingCompleted: false })
+            await AsyncStorage.setItem('isSignedIn', 'true')
         } catch (error) {
-            console.log(error)
+            console.log('Error saving login status to AsyncStorage:', error)
         }
     }
 
-    const showAlert = () =>
-        Alert.alert('', 'Thanks for subscribing, stay tuned!', [
-            {
-                text: 'OK',
-                onPress: setLoggedIn,
-            },
-        ])
+    // const showAlert = () =>
+    //     Alert.alert('', 'Thanks for subscribing, stay tuned!', [
+    //         {
+    //             text: 'OK',
+    //             onPress: setLoggedIn,
+    //         },
+    //     ])
 
     return (
         <KeyboardAvoidingElement>
@@ -91,7 +87,7 @@ const OnboardingScreen = ({ navigation }) => {
                         },
                     ]}
                     disabled={!validName || !validEmail}
-                    onPress={showAlert}
+                    onPress={setLoggedIn}
                 >
                     <Text style={styles.buttonText}>Next</Text>
                 </Pressable>

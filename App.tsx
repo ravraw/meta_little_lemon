@@ -7,36 +7,31 @@ import { connectToDatabase, createTables } from './database/db';
 
 export const SignedInContext = createContext({});
 
-const defaultUserStatus = {
-  isSignedIn: false,
-  isOnboardingCompleted: false,
-}
-
 const db = connectToDatabase()
 
 export default function App() {
-  const [userStatus, setUserStatus]  = useState(defaultUserStatus);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async () => {
         try {
-            const values = await AsyncStorage.multiGet(['isSignedIn', 'isOnboardingCompleted'])
-            console.log(values)
-            const initialUserStatus = values.reduce((acc, curr) => {
+            const signedIn = await AsyncStorage.getItem('isSignedIn')
+            // const initialUserStatus = values.reduce((acc, curr) => {
               // Every item in the values array is itself an array with a string key and a stringified value, i.e ['pushNotifications', 'false']
-              acc[curr[0]] = JSON.parse(curr[1]) || false
-              return acc
-          },
-          {})
-          setUserStatus(prevStatus => ({...prevStatus, ...initialUserStatus}))
+              // acc[curr[0]] = JSON.parse(curr[1]) || false
+              // return acc
+          // },
+          // {})
+          setIsSignedIn(signedIn)
         } catch (error) {
             console.log({ error })
         } finally{
           setIsLoading(false)
         }
     };
-},[userStatus])
+},[])
 
 const loadData = useCallback(async () => {
   try {
@@ -52,7 +47,7 @@ useEffect(() => {
 }, [loadData])
 
   return (
-    <SignedInContext.Provider value={{userStatus, setUserStatus, isLoading, db}}>
+    <SignedInContext.Provider value={{isSignedIn, setIsSignedIn, isLoading, db}}>
     <NavigationContainer>
       <StackNavigator />
     </NavigationContainer>

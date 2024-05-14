@@ -30,7 +30,6 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     const [profile, setProfile] = useState(defaultProfile)
-
     const [validFirstName, setValidFirstName] = useState(false)
     const [validLastName, setValidLastName] = useState(false)
     const [validEmail, setValidEmail] = useState(false)
@@ -53,7 +52,9 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     const updateProfile = (obj) => {
+        console.log('from Update profile', obj)
         setProfile((prevState) => {
+            console.log(prevState)
             return { ...prevState, ...obj }
         })
     }
@@ -85,6 +86,7 @@ const ProfileScreen = ({ navigation }) => {
         }
     }, [])
 
+    console.log('From Pofile screen')
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.header}>Personal Information</Text>
@@ -109,10 +111,10 @@ const ProfileScreen = ({ navigation }) => {
                     <TextInput
                         value={profile.firstName}
                         placeholder="John"
-                        onChangeText={(value) =>
+                        onChange={(value) =>
                             updateProfile({ firstName: value })
                         }
-                        onChange={validateFirstName}
+                        onChangeText={validateFirstName}
                         keyboardType="default"
                         maxLength={28}
                         style={styles.textInput}
@@ -124,10 +126,8 @@ const ProfileScreen = ({ navigation }) => {
                     <TextInput
                         value={profile.lastName}
                         placeholder="Doe"
-                        onChangeText={(value) =>
-                            updateProfile('lastName', value)
-                        }
-                        onChange={validateLastName}
+                        onChange={(value) => updateProfile('lastName', value)}
+                        onChangeText={validateLastName}
                         keyboardType="default"
                         maxLength={28}
                         style={styles.textInput}
@@ -139,8 +139,8 @@ const ProfileScreen = ({ navigation }) => {
                     <TextInput
                         value={profile.email.toLowerCase()}
                         placeholder="Hello@example.com"
-                        onChangeText={(value) => updateProfile('email', value)}
-                        onChange={validateEmail}
+                        onChange={(value) => updateProfile('email', value)}
+                        onChangeText={validateEmail}
                         keyboardType="email-address"
                         maxLength={50}
                         style={styles.textInput}
@@ -152,10 +152,10 @@ const ProfileScreen = ({ navigation }) => {
                     <TextInput
                         value={profile.phoneNumber}
                         placeholder="(403)123-123"
-                        onChangeText={(value) =>
+                        onChange={(value) =>
                             updateProfile('phoneNumber', value)
                         }
-                        onChange={isValidPhoneNumber}
+                        onChangeText={isValidPhoneNumber}
                         keyboardType="number-pad"
                         maxLength={50}
                         style={styles.textInput}
@@ -170,9 +170,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Switch
                         color="#495E57"
                         value={profile.orderStatuses}
-                        onValueChange={updateProfile({
-                            orderStatuses: !profile.orderStatuses,
-                        })}
+                        onValueChange={() =>
+                            updateProfile({
+                                orderStatuses: !profile.orderStatuses,
+                            })
+                        }
                     />
                 </View>
                 <View style={styles.row}>
@@ -180,9 +182,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Switch
                         color="#495E57"
                         value={profile.passwordChanges}
-                        onValueChange={updateProfile({
-                            passwordChanges: !profile.passwordChanges,
-                        })}
+                        onValueChange={() =>
+                            updateProfile({
+                                passwordChanges: !profile.passwordChanges,
+                            })
+                        }
                     />
                 </View>
                 <View style={styles.row}>
@@ -190,9 +194,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Switch
                         color="#495E57"
                         value={profile.specialOffers}
-                        onValueChange={updateProfile({
-                            specialOffers: !profile.specialOffers,
-                        })}
+                        onValueChange={() =>
+                            updateProfile({
+                                specialOffers: !profile.specialOffers,
+                            })
+                        }
                     />
                 </View>
                 <View style={styles.row}>
@@ -200,9 +206,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Switch
                         color="#495E57"
                         value={profile.newsletter}
-                        onValueChange={updateProfile({
-                            newsletter: !profile.newsletter,
-                        })}
+                        onValueChange={() =>
+                            updateProfile({
+                                newsletter: !profile.newsletter,
+                            })
+                        }
                     />
                 </View>
             </View>
