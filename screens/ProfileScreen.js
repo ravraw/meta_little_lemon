@@ -17,7 +17,11 @@ import {
     testPhoneNumber,
 } from '../utils'
 
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+
 const ProfileScreen = ({ navigation }) => {
+    const defaultImage =
+        'https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png'
     const defaultProfile = {
         firstName: '',
         lastName: '',
@@ -33,7 +37,8 @@ const ProfileScreen = ({ navigation }) => {
     const [validFirstName, setValidFirstName] = useState(false)
     const [validLastName, setValidLastName] = useState(false)
     const [validEmail, setValidEmail] = useState(false)
-    const [checked, setChecked] = React.useState(false)
+    const [checked, setChecked] = useState(false)
+    const [profileImage, setProfileImage] = useState(defaultImage)
 
     const validateFirstName = () => {
         setValidFirstName(testFirstName(profile.firstName))
@@ -54,7 +59,6 @@ const ProfileScreen = ({ navigation }) => {
     const updateProfile = (obj) => {
         console.log('from Update profile', obj)
         setProfile((prevState) => {
-            console.log(prevState)
             return { ...prevState, ...obj }
         })
     }
@@ -66,6 +70,14 @@ const ProfileScreen = ({ navigation }) => {
             console.log(error)
         }
     }
+
+    const changeImage = () => {
+        launchImageLibrary({ storageOptions: { path: 'image' } }, (respose) => {
+            setProfileImage(respose.assets[0].uri)
+        })
+    }
+
+    const removeImage = () => setProfileImage(defaultImage)
 
     useEffect(() => {
         ;async () => {
@@ -87,20 +99,27 @@ const ProfileScreen = ({ navigation }) => {
     }, [])
 
     console.log('From Pofile screen')
+
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.header}>Personal Information</Text>
             <View style={styles.avatarContainer}>
                 <Image
-                    source={require('../assets/images/avatar.png')}
+                    source={{ uri: profileImage }}
                     style={styles.avatarImage}
                 />
-                <Pressable style={[styles.button, styles.saveButton]}>
+                <Pressable
+                    style={[styles.button, styles.saveButton]}
+                    onPress={changeImage}
+                >
                     <Text style={[styles.buttonText, styles.buttonTextWhite]}>
                         Change
                     </Text>
                 </Pressable>
-                <Pressable style={[styles.button, styles.discardButton]}>
+                <Pressable
+                    style={[styles.button, styles.discardButton]}
+                    onPress={removeImage}
+                >
                     <Text style={styles.buttonText}>Remove</Text>
                 </Pressable>
             </View>
