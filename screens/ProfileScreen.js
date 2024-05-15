@@ -20,46 +20,68 @@ import {
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
 const ProfileScreen = ({ navigation }) => {
-    const defaultImage =
-        'https://icons.veryicon.com/png/o/miscellaneous/rookie-official-icon-gallery/225-default-avatar.png'
+    const defaultImage = 'https://rb.gy/tstvo8'
     const defaultProfile = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        phoneNumber: '',
-        orderStatuses: false,
-        passwordChanges: false,
-        specialOffers: false,
-        newsletter: false,
+        personalInformation: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            phoneNumber: '',
+        },
+        emailNotification: {
+            orderStatuses: false,
+            passwordChanges: false,
+            specialOffers: false,
+            newsletter: false,
+        },
     }
 
     const [profile, setProfile] = useState(defaultProfile)
     const [validFirstName, setValidFirstName] = useState(false)
     const [validLastName, setValidLastName] = useState(false)
     const [validEmail, setValidEmail] = useState(false)
+    const [validPhoneNumber, setValidPhoneNumber] = useState(false)
     const [checked, setChecked] = useState(false)
     const [profileImage, setProfileImage] = useState(defaultImage)
 
     const validateFirstName = () => {
-        setValidFirstName(testFirstName(profile.firstName))
+        setValidFirstName(testFirstName(profile.personalInformation.firstName))
     }
 
     const validateLastName = () => {
-        setValidLastName(testLastName(profile.lastName))
+        setValidLastName(testLastName(profile.personalInformation.lastName))
     }
 
     const validateEmail = () => {
-        setValidEmail(testEmail(profile.email))
+        setValidEmail(testEmail(profile.personalInformation.email))
     }
 
     const isValidPhoneNumber = () => {
-        setPhoneNumber(testPhoneNumber(profile.phoneNumber))
+        setValidPhoneNumber(
+            testPhoneNumber(profile.personalInformation.phoneNumber)
+        )
     }
 
-    const updateProfile = (obj) => {
+    const updatePersonalInformation = (obj) => {
         console.log('from Update profile', obj)
         setProfile((prevState) => {
-            return { ...prevState, ...obj }
+            return {
+                ...prevState,
+                personalInformation: {
+                    ...prevState.personalInformation,
+                    ...obj,
+                },
+            }
+        })
+    }
+
+    const updateEmailNotification = (obj) => {
+        console.log('from Update profile', obj)
+        setProfile((prevState) => {
+            return {
+                ...prevState,
+                emailNotification: { ...prevState.emailNotification, ...obj },
+            }
         })
     }
 
@@ -79,26 +101,62 @@ const ProfileScreen = ({ navigation }) => {
 
     const removeImage = () => setProfileImage(defaultImage)
 
-    useEffect(() => {
-        ;async () => {
-            try {
-                const savedProfile = await AsyncStorage.multiGet([
-                    ...Object.keys(profile),
-                ])
+    const saveChanges = async () => {
+        try {
+            const personalInformationChanges = Object.entries(
+                profile.personalInformation
+            )
+            const emailNotificationChanges = Object.entries(
+                profile.emailNotification
+            ).map((entry) => [entry[0], entry[1] ? 'true' : 'false'])
+            console.log({
+                personalInformationChanges,
+                emailNotificationChanges,
+            })
+            await AsyncStorage.multiSet([
+                ...personalInformationChanges,
+                ...emailNotificationChanges,
+            ])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const discardChanges = () => {
+        setProfile()
+    }
 
-                const initialProfile = savedProfile.reduce((acc, curr) => {
-                    acc[curr[0]] = JSON.parse(curr[1])
+    useEffect(async () => {
+        try {
+            const savedProfile = await AsyncStorage.multiGet([
+                ...Object.keys(profile.personalInformation),
+                ...Object.keys(profile.emailNotification),
+            ])
+            console.log({ savedProfile })
+
+            const initialProfile = savedProfile.reduce(
+                (acc, curr) => {
+                    if (
+                        Object.keys(
+                            defaultProfile.personalInformation
+                        ).includes(acc[curr[0]])
+                    ) {
+                        acc.personalInformation[curr[0]] = JSON.parse(curr[1])
+                    } else {
+                        acc.emailNotification[curr[0]] = JSON.parse(curr[1])
+                    }
                     return acc
-                }, {})
-            } catch (e) {
-                console.log(e.message)
-            } finally {
-                console.log(profile)
-            }
+                },
+                { defaultProfile }
+            )
+            console.log({ initialProfile })
+        } catch (e) {
+            console.log(e.message)
+        } finally {
+            console.log(profile)
         }
     }, [])
 
-    console.log('From Pofile screen')
+    // console.log('From Pofile screen', profile)
 
     return (
         <ScrollView style={styles.container}>
@@ -128,10 +186,12 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>First Name</Text>
                     <TextInput
-                        value={profile.firstName}
+                        value={profile.personalInformation.firstName}
                         placeholder="John"
-                        onChange={(value) =>
-                            updateProfile({ firstName: value })
+                        onChange={({ nativeEvent }) =>
+                            updatePersonalInformation({
+                                firstName: nativeEvent.text,
+                            })
                         }
                         onChangeText={validateFirstName}
                         keyboardType="default"
@@ -143,9 +203,13 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>Last Name</Text>
                     <TextInput
-                        value={profile.lastName}
+                        value={profile.personalInformation.lastName}
                         placeholder="Doe"
-                        onChange={(value) => updateProfile('lastName', value)}
+                        onChange={({ nativeEvent }) =>
+                            updatePersonalInformation({
+                                lastName: nativeEvent.text,
+                            })
+                        }
                         onChangeText={validateLastName}
                         keyboardType="default"
                         maxLength={28}
@@ -156,9 +220,13 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>Email</Text>
                     <TextInput
-                        value={profile.email.toLowerCase()}
+                        value={profile.personalInformation.email.toLowerCase()}
                         placeholder="Hello@example.com"
-                        onChange={(value) => updateProfile('email', value)}
+                        onChange={({ nativeEvent }) =>
+                            updatePersonalInformation({
+                                email: nativeEvent.text,
+                            })
+                        }
                         onChangeText={validateEmail}
                         keyboardType="email-address"
                         maxLength={50}
@@ -169,10 +237,12 @@ const ProfileScreen = ({ navigation }) => {
                 <View style={styles.textInputWrapper}>
                     <Text style={styles.textInputLabel}>Phone number</Text>
                     <TextInput
-                        value={profile.phoneNumber}
+                        value={profile.personalInformation.phoneNumber}
                         placeholder="(403)123-123"
-                        onChange={(value) =>
-                            updateProfile('phoneNumber', value)
+                        onChange={({ nativeEvent }) =>
+                            updatePersonalInformation({
+                                phoneNumber: nativeEvent.text,
+                            })
                         }
                         onChangeText={isValidPhoneNumber}
                         keyboardType="number-pad"
@@ -188,10 +258,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={styles.text}>Order statuses</Text>
                     <Switch
                         color="#495E57"
-                        value={profile.orderStatuses}
+                        value={profile.emailNotification.orderStatuses}
                         onValueChange={() =>
-                            updateProfile({
-                                orderStatuses: !profile.orderStatuses,
+                            updateEmailNotification({
+                                orderStatuses:
+                                    !profile.emailNotification.orderStatuses,
                             })
                         }
                     />
@@ -200,10 +271,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={styles.text}>Password changes</Text>
                     <Switch
                         color="#495E57"
-                        value={profile.passwordChanges}
+                        value={profile.emailNotification.passwordChanges}
                         onValueChange={() =>
-                            updateProfile({
-                                passwordChanges: !profile.passwordChanges,
+                            updateEmailNotification({
+                                passwordChanges:
+                                    !profile.emailNotification.passwordChanges,
                             })
                         }
                     />
@@ -212,10 +284,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={styles.text}>Special offers</Text>
                     <Switch
                         color="#495E57"
-                        value={profile.specialOffers}
+                        value={profile.emailNotification.specialOffers}
                         onValueChange={() =>
-                            updateProfile({
-                                specialOffers: !profile.specialOffers,
+                            updateEmailNotification({
+                                specialOffers:
+                                    !profile.emailNotification.specialOffers,
                             })
                         }
                     />
@@ -224,10 +297,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={styles.text}>Newsletter</Text>
                     <Switch
                         color="#495E57"
-                        value={profile.newsletter}
+                        value={profile.emailNotification.newsletter}
                         onValueChange={() =>
-                            updateProfile({
-                                newsletter: !profile.newsletter,
+                            updateEmailNotification({
+                                newsletter:
+                                    !profile.emailNotification.newsletter,
                             })
                         }
                     />
@@ -238,10 +312,16 @@ const ProfileScreen = ({ navigation }) => {
             </Pressable>
 
             <View style={styles.changeButtonsContainer}>
-                <Pressable style={[styles.button, styles.discardButton]}>
+                <Pressable
+                    style={[styles.button, styles.discardButton]}
+                    onPress={discardChanges}
+                >
                     <Text style={styles.buttonText}>Discard changes</Text>
                 </Pressable>
-                <Pressable style={[styles.button, styles.saveButton]}>
+                <Pressable
+                    style={[styles.button, styles.saveButton]}
+                    onPress={saveChanges}
+                >
                     <Text style={[styles.buttonText, styles.buttonTextWhite]}>
                         Save changes
                     </Text>
