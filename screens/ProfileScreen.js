@@ -125,36 +125,35 @@ const ProfileScreen = ({ navigation }) => {
         setProfile()
     }
 
-    useEffect(async () => {
+    const fetchSavedProfile = async () => {
         try {
             const savedProfile = await AsyncStorage.multiGet([
                 ...Object.keys(profile.personalInformation),
                 ...Object.keys(profile.emailNotification),
             ])
-            console.log({ savedProfile })
-
-            const initialProfile = savedProfile.reduce(
-                (acc, curr) => {
-                    if (
-                        Object.keys(
-                            defaultProfile.personalInformation
-                        ).includes(acc[curr[0]])
-                    ) {
-                        acc.personalInformation[curr[0]] = JSON.parse(curr[1])
-                    } else {
-                        acc.emailNotification[curr[0]] = JSON.parse(curr[1])
-                    }
-                    return acc
-                },
-                { defaultProfile }
-            )
-            console.log({ initialProfile })
+            const initialProfile = savedProfile.reduce((acc, curr) => {
+                if (
+                    Object.keys(defaultProfile.personalInformation).includes(
+                        curr[0]
+                    )
+                ) {
+                    acc.personalInformation[curr[0]] = curr[1]
+                } else {
+                    acc.emailNotification[curr[0]] = curr[1] === 'true'
+                }
+                return acc
+            }, defaultProfile)
+            setProfile(initialProfile)
         } catch (e) {
             console.log(e.message)
         } finally {
-            console.log(profile)
+            console.log({ profile })
         }
-    }, [])
+    }
+
+    useEffect(() => {
+        fetchSavedProfile()
+    }, [profile])
 
     // console.log('From Pofile screen', profile)
 
