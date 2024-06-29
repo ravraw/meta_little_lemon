@@ -33,21 +33,21 @@ const StackNavigator = () => {
                 },
             ]}
         >
-            <Navigator>
-                {true ? (
-                    <>
-                        <Screen
-                            name="Profile"
-                            component={ProfileScreen}
-                            options={{ headerShown: false }}
-                        />
-                        <Screen name="Welcome" component={WelcomeScreen} />
-                        <Screen name="Menu" component={HomeScreen} />
-                    </>
-                ) : (
+            {isSignedIn ? (
+                <Navigator>
+                    <Screen
+                        name="Profile"
+                        component={ProfileScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Screen name="Welcome" component={WelcomeScreen} />
+                    <Screen name="Menu" component={HomeScreen} />
+                </Navigator>
+            ) : (
+                <Navigator>
                     <Screen name="Onboarding" component={OnboardingScreen} />
-                )}
-            </Navigator>
+                </Navigator>
+            )}
         </SafeAreaView>
     )
 }

@@ -147,15 +147,15 @@ const ProfileScreen = ({ navigation }) => {
         } catch (e) {
             console.log(e.message)
         } finally {
-            console.log({ profile })
+            console.log({ profileScreen: profile })
         }
     }
 
     useEffect(() => {
-        fetchSavedProfile()
-    }, [profile])
+        // fetchSavedProfile()
+    }, [])
 
-    // console.log('From Pofile screen', profile)
+    console.log('From Pofile screen', profile)
 
     return (
         <ScrollView style={styles.container}>
